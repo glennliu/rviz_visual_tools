@@ -55,23 +55,28 @@ RvizVisualToolsGui::RvizVisualToolsGui(QWidget* parent) : rviz::Panel(parent)
 {
   // Create a push button
   btn_next_ = new QPushButton(this);
-  btn_next_->setText("Next");
+  btn_next_->setText("DroneReady");
   connect(btn_next_, SIGNAL(clicked()), this, SLOT(moveNext()));
 
   // Create a push button
   btn_auto_ = new QPushButton(this);
-  btn_auto_->setText("Continue");
+  btn_auto_->setText("Takeoff");
   connect(btn_auto_, SIGNAL(clicked()), this, SLOT(moveAuto()));
 
   // Create a push button
   btn_full_auto_ = new QPushButton(this);
-  btn_full_auto_->setText("Break");
+  btn_full_auto_->setText("Run");
   connect(btn_full_auto_, SIGNAL(clicked()), this, SLOT(moveFullAuto()));
 
   // Create a push button
   btn_stop_ = new QPushButton(this);
-  btn_stop_->setText("Stop");
+  btn_stop_->setText("Land");
   connect(btn_stop_, SIGNAL(clicked()), this, SLOT(moveStop()));
+
+    // Optional button
+    btn_opt_ = new QPushButton(this);
+    btn_opt_->setText("Option");
+    connect(btn_opt_, SIGNAL(clicked()), this, SLOT(moveStop()));
 
   // Horizontal Layout
   auto* hlayout1 = new QHBoxLayout;
@@ -79,6 +84,7 @@ RvizVisualToolsGui::RvizVisualToolsGui(QWidget* parent) : rviz::Panel(parent)
   hlayout1->addWidget(btn_auto_);
   hlayout1->addWidget(btn_full_auto_);
   hlayout1->addWidget(btn_stop_);
+  hlayout1->addWidget(btn_opt_);
 
   // Verticle layout
   auto* layout = new QVBoxLayout;
@@ -88,6 +94,7 @@ RvizVisualToolsGui::RvizVisualToolsGui(QWidget* parent) : rviz::Panel(parent)
   btn_next_->setEnabled(true);
   btn_auto_->setEnabled(true);
   btn_full_auto_->setEnabled(true);
+
 }
 
 void RvizVisualToolsGui::moveNext()

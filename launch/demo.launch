@@ -4,6 +4,9 @@
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
   <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
 
+  <!--Start Rviz-->
+  <!--<include file="$(find rviz_visual_tools)/launch/demo_rviz.launch"/>-->
+
   <!-- Start demo -->
   <node name="rviz_visual_tools_demo" launch-prefix="$(arg launch_prefix)" pkg="rviz_visual_tools"
 	type="demo" output="screen">

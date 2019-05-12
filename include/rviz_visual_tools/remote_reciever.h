@@ -40,16 +40,23 @@
 #define RVIZ_VISUAL_TOOLS_REMOTE_RECIEVER_H
 
 #include <sensor_msgs/Joy.h>
+#include <std_srvs/SetBool.h>
 #include <ros/ros.h>
 
 namespace rviz_visual_tools
 {
 class RemoteReciever
 {
+
 public:
+
+
+
   RemoteReciever()
   {
     joy_publisher_ = nh_.advertise<sensor_msgs::Joy>("/rviz_visual_tools_gui", 1);
+    joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
+//    joy_server_ = nh_.advertiseService("/mission_cmd", &RemoteReciever::mission_callback,this);
   }
 
   void publishNext()
@@ -59,6 +66,11 @@ public:
     msg.buttons.resize(9);
     msg.buttons[1] = 1;
     joy_publisher_.publish(msg);
+
+    std_srvs::SetBool cmd_bool;
+    cmd_bool.request.data = true;
+    joy_client_.call(cmd_bool);
+    ROS_INFO("service client called!");
   }
 
   void publishContinue()
@@ -94,8 +106,22 @@ protected:
   // The ROS publishers
   ros::Publisher joy_publisher_;
 
+  // The ROS Services
+  ros::ServiceClient joy_client_;
+  ros::ServiceServer joy_server_;
+
   // The ROS node handle.
   ros::NodeHandle nh_;
+
+  //
+//    bool mission_callback(std_srvs::SetBool::Request &req,
+//                          std_srvs::SetBool::Response &res)
+//    {
+//        ROS_INFO("mission command received!");
+//        return true;
+//    }
+
+
 };
 
 }  // end namespace rviz_visual_tools

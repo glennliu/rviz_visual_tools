@@ -137,6 +137,10 @@ set_target_properties(${PROJECT_NAME}_imarker_simple_demo
   imarker_simple_demo PREFIX ""
 )
 
+# mav commander
+add_executable(mav_cmder src/mav_commander.cpp)
+target_link_libraries(mav_cmder ${catkin_LOBRARIES} ${PROJECT_NAME})
+
 ##########
 ## TEST ##
 ##########

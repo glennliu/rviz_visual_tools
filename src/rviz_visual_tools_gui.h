@@ -84,6 +84,7 @@ protected:
   QPushButton* btn_auto_;
   QPushButton* btn_full_auto_;
   QPushButton* btn_stop_;
+  QPushButton* btn_opt_;
 
   RemoteReciever remote_reciever_;
 };
