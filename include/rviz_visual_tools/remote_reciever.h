@@ -42,6 +42,7 @@
 #include <sensor_msgs/Joy.h>
 #include <std_srvs/SetBool.h>
 #include <ros/ros.h>
+#include <mav_cmd_enum.h>
 
 namespace rviz_visual_tools
 {
@@ -49,9 +50,6 @@ class RemoteReciever
 {
 
 public:
-
-
-
   RemoteReciever()
   {
     joy_publisher_ = nh_.advertise<sensor_msgs::Joy>("/rviz_visual_tools_gui", 1);
@@ -68,9 +66,9 @@ public:
     joy_publisher_.publish(msg);
 
     std_srvs::SetBool cmd_bool;
-    cmd_bool.request.data = true;
+    cmd_bool.request.data = MAV_CMD_READY;
     joy_client_.call(cmd_bool);
-    ROS_INFO("service client called!");
+    ROS_INFO("READY command called!");
   }
 
   void publishContinue()

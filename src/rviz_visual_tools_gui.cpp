@@ -46,6 +46,8 @@
 #include <QSpinBox>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QtGui/QPalette>
+#include <QtWidgets/QtWidgets>
 
 #include "rviz_visual_tools_gui.h"
 
@@ -73,10 +75,11 @@ RvizVisualToolsGui::RvizVisualToolsGui(QWidget* parent) : rviz::Panel(parent)
   btn_stop_->setText("Land");
   connect(btn_stop_, SIGNAL(clicked()), this, SLOT(moveStop()));
 
-    // Optional button
-    btn_opt_ = new QPushButton(this);
-    btn_opt_->setText("Option");
-    connect(btn_opt_, SIGNAL(clicked()), this, SLOT(moveStop()));
+  // Optional button
+  btn_opt_ = new QPushButton(this);
+  btn_opt_->setText("Option");
+
+  connect(btn_opt_, SIGNAL(clicked()), this, SLOT(moveStop()));
 
   // Horizontal Layout
   auto* hlayout1 = new QHBoxLayout;
@@ -93,7 +96,8 @@ RvizVisualToolsGui::RvizVisualToolsGui(QWidget* parent) : rviz::Panel(parent)
 
   btn_next_->setEnabled(true);
   btn_auto_->setEnabled(true);
-  btn_full_auto_->setEnabled(true);
+  btn_full_auto_->setDisabled(true);
+  btn_opt_->setEnabled(true);
 
 }
 

@@ -5,6 +5,7 @@
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
 #include <std_srvs/SetBool.h>
+#include <include/mav_cmd_enum.h>
 
 ros::Publisher vis_pub;
 ros::ServiceServer cmd_server;
@@ -43,9 +44,9 @@ void pub_timer_(const ros::TimerEvent &ev)
 
 bool cmd_server_callback_(std_srvs::SetBool::Request &req,std_srvs::SetBool::Response &res)
 {
-    std_srvs::SetBool rqt;
+//    std_srvs::SetBool req;
 
-    ROS_INFO("mission cmd received!");
+    ROS_INFO("mission cmd received: %d \n",req.data);
 }
 
 
