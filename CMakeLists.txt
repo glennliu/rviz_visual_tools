@@ -60,6 +60,7 @@ catkin_package(
     ${PROJECT_NAME}_gui
     ${PROJECT_NAME}_remote_control
     ${PROJECT_NAME}_imarker_simple
+    ${PROJECT_NAME}_map
   CATKIN_DEPENDS
     eigen_conversions
     geometry_msgs
@@ -89,6 +90,10 @@ set(SOURCE_FILES
 # Rviz GUI library
 add_library(${PROJECT_NAME}_gui ${SOURCE_FILES} src/remote_control.cpp)
 target_link_libraries(${PROJECT_NAME}_gui ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+
+# Mapping Panel Library
+add_library(${PROJECT_NAME}_map src/rviz_visual_tools_map.cpp src/key_tool.cpp src/remote_control.cpp)
+target_link_libraries(${PROJECT_NAME}_map ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 
 # Remote control library
 add_library(${PROJECT_NAME}_remote_control src/remote_control.cpp)
@@ -170,6 +175,7 @@ install(
     ${PROJECT_NAME}_gui
     ${PROJECT_NAME}_imarker_simple
     ${PROJECT_NAME}_remote_control
+    ${PROJECT_NAME}_map
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
@@ -183,7 +189,7 @@ install(DIRECTORY resources DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 # Install xml plugin config
 install(FILES
-  plugin_description.xml
+  plugin_description2.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
