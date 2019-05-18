@@ -39,98 +39,142 @@
 #include <cstdio>
 
 #include <QGroupBox>
-#include <QHBoxLayout>
+//#include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPainter>
 #include <QSpinBox>
 #include <QTimer>
-#include <QVBoxLayout>
+//#include <QVBoxLayout>
 #include <QtGui/QPalette>
 #include <QtWidgets/QtWidgets>
 
 #include "rviz_visual_tools_gui.h"
 
-namespace rviz_visual_tools
-{
-RvizVisualToolsGui::RvizVisualToolsGui(QWidget* parent) : rviz::Panel(parent)
-{
-  // Create a push button
-  btn_next_ = new QPushButton(this);
-  btn_next_->setText("DroneReady");
-  connect(btn_next_, SIGNAL(clicked()), this, SLOT(moveNext()));
+namespace rviz_visual_tools {
+//    auto *layout = new QVBoxLayout;
 
-  // Create a push button
-  btn_auto_ = new QPushButton(this);
-  btn_auto_->setText("Takeoff");
-  connect(btn_auto_, SIGNAL(clicked()), this, SLOT(moveAuto()));
+    RvizVisualToolsGui::RvizVisualToolsGui(QWidget *parent) : rviz::Panel(parent) {
+        //*********** Init Buttons *************//
+        // Create a push button
+        btn_mapping = new QPushButton(this);
+        btn_mapping->setText("Mapping");
+        connect(btn_mapping, SIGNAL(clicked()), this, SLOT(moveMapping()));
 
-  // Create a push button
-  btn_full_auto_ = new QPushButton(this);
-  btn_full_auto_->setText("Run");
-  connect(btn_full_auto_, SIGNAL(clicked()), this, SLOT(moveFullAuto()));
+        // Create a push button
+        btn_teach = new QPushButton(this);
+        btn_teach->setText("Teach");
+        connect(btn_teach, SIGNAL(clicked()), this, SLOT(moveTeach()));
 
-  // Create a push button
-  btn_stop_ = new QPushButton(this);
-  btn_stop_->setText("Land");
-  connect(btn_stop_, SIGNAL(clicked()), this, SLOT(moveStop()));
+        // Create a push button
+        btn_optimize = new QPushButton(this);
+        btn_optimize->setText("Optimize");
+        connect(btn_optimize, SIGNAL(clicked()), this, SLOT(moveOptimize()));
 
-  // Optional button
-  btn_opt_ = new QPushButton(this);
-  btn_opt_->setText("Option");
+        // Create a push button
+        btn_repeat = new QPushButton(this);
+        btn_repeat->setText("Repeat");
+        connect(btn_repeat, SIGNAL(clicked()), this, SLOT(moveRepeat()));
 
-  connect(btn_opt_, SIGNAL(clicked()), this, SLOT(moveStop()));
 
-  // Horizontal Layout
-  auto* hlayout1 = new QHBoxLayout;
-  hlayout1->addWidget(btn_next_);
-  hlayout1->addWidget(btn_auto_);
-  hlayout1->addWidget(btn_full_auto_);
-  hlayout1->addWidget(btn_stop_);
-  hlayout1->addWidget(btn_opt_);
 
-  // Verticle layout
-  auto* layout = new QVBoxLayout;
-  layout->addLayout(hlayout1);
-  setLayout(layout);
 
-  btn_next_->setEnabled(true);
-  btn_auto_->setEnabled(true);
-  btn_full_auto_->setDisabled(true);
-  btn_opt_->setEnabled(true);
 
-}
+        // Horizontal Layout1: Menu
+        menuLayout->addWidget(btn_mapping);
+        menuLayout->addWidget(btn_teach);
+        menuLayout->addWidget(btn_optimize);
+        menuLayout->addWidget(btn_repeat);
 
-void RvizVisualToolsGui::moveNext()
-{
-  remote_reciever_.publishNext();
-}
+        // Verticle layout
+//        auto *layout = new QVBoxLayout;
+        mainLayout->addLayout(menuLayout);
+        setLayout(mainLayout);
 
-void RvizVisualToolsGui::moveAuto()
-{
-  remote_reciever_.publishContinue();
-}
+        btn_mapping->setEnabled(true);
+        btn_teach->setEnabled(true);
+        btn_optimize->setEnabled(true);
+        btn_repeat->setEnabled(true);
 
-void RvizVisualToolsGui::moveFullAuto()
-{
-  remote_reciever_.publishBreak();
-}
 
-void RvizVisualToolsGui::moveStop()
-{
-  remote_reciever_.publishStop();
-}
+    }
 
-void RvizVisualToolsGui::save(rviz::Config config) const
-{
-  rviz::Panel::save(config);
-}
+    void RvizVisualToolsGui::moveMapping() {
+//  remote_reciever_.publishNext();
 
-void RvizVisualToolsGui::load(const rviz::Config& config)
-{
-  rviz::Panel::load(config);
-}
+
+    }
+
+    void RvizVisualToolsGui::moveTeach() {
+//  remote_reciever_.publishContinue();
+
+        //
+        btn_mapping->setDisabled(true);
+        btn_optimize->setDisabled(true);
+        btn_repeat->setDisabled(true);
+
+
+        btn_teach_load_path = new QPushButton(this);
+        btn_teach_load_path->setText("LoadPath");
+        connect(btn_teach_load_path, SIGNAL(clicked()), this, SLOT(moveTeachStart()));
+
+        btn_teach_handheld = new QPushButton(this);
+        btn_teach_handheld->setText("Handheld");
+        connect(btn_teach_handheld, SIGNAL(clicked()), this, SLOT(moveTeachFinish()));
+
+        btn_teach_joystick = new QPushButton(this);
+        btn_teach_joystick->setText("Joystick");
+        connect(btn_teach_joystick, SIGNAL(clicked()), this, SLOT(moveTeachReset()));
+
+        btn_teach_reset = new QPushButton(this);
+        btn_teach_reset->setText("Reset");
+        connect(btn_teach_reset, SIGNAL(clicked()), this, SLOT(moveTeachReset()));
+
+        btn_back2main = new QPushButton(this);
+        btn_back2main->setText("GoBack");
+        connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
+
+        // Horizontal Layout2: Teach
+        auto *teachLayout = new QHBoxLayout;
+        teachLayout->addWidget(btn_teach_load_path);
+        teachLayout->addWidget(btn_teach_handheld);
+        teachLayout->addWidget(btn_teach_joystick);
+        teachLayout->addWidget(btn_teach_reset);
+        teachLayout->addWidget(btn_back2main);
+        mainLayout->addLayout(teachLayout);
+        setLayout(mainLayout);
+
+        btn_teach_load_path->setEnabled(true);
+        btn_teach_handheld->setEnabled(true);
+        btn_teach_joystick->setEnabled(true);
+        btn_teach_reset->setEnabled(true);
+        btn_back2main->setEnabled(true);
+    }
+
+    void RvizVisualToolsGui::moveOptimize(){
+//  remote_reciever_.publishBreak();
+    }
+
+    void RvizVisualToolsGui::moveRepeat() {
+//  remote_reciever_.publishStop();
+    }
+
+    void RvizVisualToolsGui::moveMain() {
+        btn_mapping->setEnabled(true);
+        btn_teach->setEnabled(true);
+        btn_optimize->setEnabled(true);
+        btn_repeat->setEnabled(true);
+    }
+
+    void RvizVisualToolsGui::save(rviz::Config config) const {
+        rviz::Panel::save(config);
+    }
+
+    void RvizVisualToolsGui::load(const rviz::Config &config) {
+        rviz::Panel::load(config);
+    }
 }  // end namespace rviz_visual_tools
 
 #include <pluginlib/class_list_macros.h>
+
 PLUGINLIB_EXPORT_CLASS(rviz_visual_tools::RvizVisualToolsGui, rviz::Panel)

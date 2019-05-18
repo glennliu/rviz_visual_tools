@@ -5,7 +5,7 @@
 	args="-d $(find rviz_visual_tools)/launch/demo.rviz" output="screen">
   </node>
 
-    <node name="mav_cmder" pkg="rviz_visual_tools" type="mav_cmder" output="screen"/>
+    <!--<node name="mav_cmder" pkg="rviz_visual_tools" type="mav_cmder" output="screen"/>-->
 
   <!-- Fake transform from world origin to robot origin (base) -->
   <node pkg="tf" type="static_transform_publisher" name="base_to_world" args="0 0 0 0 0 0 /world /base 30" />

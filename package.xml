@@ -39,7 +39,7 @@
   <test_depend>rosunit</test_depend>
 
   <export>
-    <rviz plugin="${prefix}/plugin_description2.xml"/>
+    <rviz plugin="${prefix}/plugin_description.xml"/>
   </export>
 
 </package>

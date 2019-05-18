@@ -49,6 +49,8 @@
 #endif
 
 #include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QComboBox>
 
 #include <rviz_visual_tools/remote_reciever.h>
@@ -62,6 +64,9 @@ class RvizVisualToolsGui : public rviz::Panel
 {
   Q_OBJECT
 public:
+
+//    auto* layout = new QVBoxLayout;
+//    auto* hlayout1 = new QHBoxLayout;
   explicit RvizVisualToolsGui(QWidget* parent = 0);
 
   virtual void load(const rviz::Config& config);
@@ -71,20 +76,32 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
 
-  void moveNext();
+  void moveMapping();
+  void moveTeach();
+  void moveOptimize();
+  void moveRepeat();
+  void moveMain();
 
-  void moveAuto();
-
-  void moveFullAuto();
-
-  void moveStop();
+  void moveTeachStart();
+  void moveTeachFinish();
+  void moveTeachReset();
 
 protected:
-  QPushButton* btn_next_;
-  QPushButton* btn_auto_;
-  QPushButton* btn_full_auto_;
-  QPushButton* btn_stop_;
-  QPushButton* btn_opt_;
+    QHBoxLayout* menuLayout = new QHBoxLayout;
+    QVBoxLayout* mainLayout = new QVBoxLayout;
+
+
+
+    QPushButton* btn_mapping;
+  QPushButton* btn_teach;
+  QPushButton* btn_optimize;
+  QPushButton* btn_repeat;
+  QPushButton* btn_back2main;
+
+  QPushButton* btn_teach_load_path;
+  QPushButton* btn_teach_handheld;
+  QPushButton* btn_teach_joystick;
+  QPushButton* btn_teach_reset;
 
   RemoteReciever remote_reciever_;
 };

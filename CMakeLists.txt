@@ -189,7 +189,7 @@ install(DIRECTORY resources DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 # Install xml plugin config
 install(FILES
-  plugin_description2.xml
+  plugin_description.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
