@@ -76,11 +76,8 @@ namespace rviz_visual_tools {
         btn_repeat->setText("Repeat");
         connect(btn_repeat, SIGNAL(clicked()), this, SLOT(moveRepeat()));
 
-
-
-
-
         // Horizontal Layout1: Menu
+        menuLayout = new QHBoxLayout;
         menuLayout->addWidget(btn_mapping);
         menuLayout->addWidget(btn_teach);
         menuLayout->addWidget(btn_optimize);
@@ -88,6 +85,7 @@ namespace rviz_visual_tools {
 
         // Verticle layout
 //        auto *layout = new QVBoxLayout;
+        mainLayout = new QVBoxLayout;
         mainLayout->addLayout(menuLayout);
         setLayout(mainLayout);
 
@@ -96,74 +94,144 @@ namespace rviz_visual_tools {
         btn_optimize->setEnabled(true);
         btn_repeat->setEnabled(true);
 
+//        delete(menuLayout);
+
+
 
     }
 
     void RvizVisualToolsGui::moveMapping() {
-//  remote_reciever_.publishNext();
-
+//  remote_receiver.publishNext();
 
     }
 
     void RvizVisualToolsGui::moveTeach() {
-//  remote_reciever_.publishContinue();
+        remote_receiver.EnterTeach();
 
         //
         btn_mapping->setDisabled(true);
         btn_optimize->setDisabled(true);
         btn_repeat->setDisabled(true);
 
-
         btn_teach_load_path = new QPushButton(this);
         btn_teach_load_path->setText("LoadPath");
-        connect(btn_teach_load_path, SIGNAL(clicked()), this, SLOT(moveTeachStart()));
+        connect(btn_teach_load_path, SIGNAL(clicked()), this, SLOT(moveTeachLoadPath()));
 
-        btn_teach_handheld = new QPushButton(this);
-        btn_teach_handheld->setText("Handheld");
-        connect(btn_teach_handheld, SIGNAL(clicked()), this, SLOT(moveTeachFinish()));
+        btn_teach_joyinit = new QPushButton(this);
+        btn_teach_joyinit->setText("JoyInit");
+        connect(btn_teach_joyinit, SIGNAL(clicked()), this, SLOT(moveTeachJoyInit()));
 
-        btn_teach_joystick = new QPushButton(this);
-        btn_teach_joystick->setText("Joystick");
-        connect(btn_teach_joystick, SIGNAL(clicked()), this, SLOT(moveTeachReset()));
+        btn_teach_joyfinish = new QPushButton(this);
+        btn_teach_joyfinish->setText("JoyFinish");
+        connect(btn_teach_joyfinish, SIGNAL(clicked()), this, SLOT(moveTeachJoyFinish()));
 
         btn_teach_reset = new QPushButton(this);
         btn_teach_reset->setText("Reset");
-        connect(btn_teach_reset, SIGNAL(clicked()), this, SLOT(moveTeachReset()));
+        connect(btn_teach_reset, SIGNAL(clicked()), this, SLOT(moveTeachJoystick()));
+
 
         btn_back2main = new QPushButton(this);
         btn_back2main->setText("GoBack");
         connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
 
+
+
         // Horizontal Layout2: Teach
-        auto *teachLayout = new QHBoxLayout;
+//        auto *teachLayout = new QHBoxLayout;
+        teachLayout = new QHBoxLayout;
         teachLayout->addWidget(btn_teach_load_path);
-        teachLayout->addWidget(btn_teach_handheld);
-        teachLayout->addWidget(btn_teach_joystick);
+        teachLayout->addWidget(btn_teach_joyinit);
+        teachLayout->addWidget(btn_teach_joyfinish);
         teachLayout->addWidget(btn_teach_reset);
         teachLayout->addWidget(btn_back2main);
         mainLayout->addLayout(teachLayout);
         setLayout(mainLayout);
 
         btn_teach_load_path->setEnabled(true);
-        btn_teach_handheld->setEnabled(true);
-        btn_teach_joystick->setEnabled(true);
+        btn_teach_joyinit->setEnabled(true);
+        btn_teach_joyfinish->setEnabled(true);
         btn_teach_reset->setEnabled(true);
         btn_back2main->setEnabled(true);
     }
 
     void RvizVisualToolsGui::moveOptimize(){
-//  remote_reciever_.publishBreak();
+//  remote_receiver.publishBreak();
     }
 
     void RvizVisualToolsGui::moveRepeat() {
-//  remote_reciever_.publishStop();
+        remote_receiver.EnterRepeat();
+
+        btn_repeat_go = new QPushButton(this);
+        btn_repeat_go->setText("Go");
+        connect(btn_repeat_go, SIGNAL(clicked()), this, SLOT(moveRepeatGo()));
+
+        btn_repeat_land = new QPushButton(this);
+        btn_repeat_land->setText("Land");
+        connect(btn_repeat_land, SIGNAL(clicked()), this, SLOT(moveRepeatLand()));
+
+        btn_back2main = new QPushButton(this);
+        btn_back2main->setText("GoBack");
+        connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
+
+        repeatLayout = new QHBoxLayout;
+        repeatLayout->addWidget(btn_repeat_go);
+        repeatLayout->addWidget(btn_repeat_land);
+        repeatLayout->addWidget(btn_back2main);
+        mainLayout->addLayout(repeatLayout);
+        setLayout(mainLayout);
+    }
+
+    void RvizVisualToolsGui::moveRepeatGo() {
+        remote_receiver.RepeatGo();
+    }
+
+    void RvizVisualToolsGui::moveRepeatLand(){
+        remote_receiver.RepeatLand();
     }
 
     void RvizVisualToolsGui::moveMain() {
+
         btn_mapping->setEnabled(true);
         btn_teach->setEnabled(true);
         btn_optimize->setEnabled(true);
         btn_repeat->setEnabled(true);
+
+        std_msgs::String gui_state_;
+        gui_state_ = remote_receiver.check_gui_state();
+        ROS_INFO("%f",gui_state_.data);
+
+        if (gui_state_.data == "TEACH_INIT" || gui_state_.data == "TEACH_FINISHED"){
+
+            // remove teach layout
+            delete (btn_teach_load_path);
+            delete (btn_teach_joyinit);
+            delete (btn_teach_joyfinish);
+            delete (btn_teach_reset);
+            delete (teachLayout);
+        }
+        else if(gui_state_.data == "REPEAT_INIT" || gui_state_.data == "REPEAT_LAND")
+        {
+            // remove repeat layout
+            delete(btn_repeat_go);
+            delete(btn_repeat_land);
+            delete(repeatLayout);
+        }
+
+
+        //
+        delete(btn_back2main);
+        setLayout(mainLayout);
+        remote_receiver.back2main();
+
+
+    }
+
+    void RvizVisualToolsGui::moveTeachJoyInit(){
+        remote_receiver.TeachJoyInit();
+    }
+
+    void RvizVisualToolsGui::moveTeachJoyFinish() {
+        remote_receiver.TeachJoyFinish();
     }
 
     void RvizVisualToolsGui::save(rviz::Config config) const {

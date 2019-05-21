@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   graph_msgs
   roscpp
+  rospy
   roslint
   rostest
   rviz
@@ -26,6 +27,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf_conversions
   trajectory_msgs
   visualization_msgs
+  message_generation
 )
 
 find_package(Eigen3 REQUIRED)
@@ -61,6 +63,7 @@ catkin_package(
     ${PROJECT_NAME}_remote_control
     ${PROJECT_NAME}_imarker_simple
     ${PROJECT_NAME}_map
+#    ${PROJECT_NAME}_remote_receiver
   CATKIN_DEPENDS
     eigen_conversions
     geometry_msgs
@@ -82,6 +85,11 @@ include_directories(SYSTEM include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS}
 ## Build ##
 ###########
 
+#add_service_files(
+#        FILES
+#        teach_cmd.srv
+#)
+
 set(SOURCE_FILES
   src/${PROJECT_NAME}_gui.cpp
   src/key_tool.cpp
@@ -98,6 +106,10 @@ target_link_libraries(${PROJECT_NAME}_map ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_
 # Remote control library
 add_library(${PROJECT_NAME}_remote_control src/remote_control.cpp)
 target_link_libraries(${PROJECT_NAME}_remote_control ${catkin_LIBRARIES})
+
+## Remote Receiver Library
+#add_library(${PROJECT_NAME}_remote_receiver src/remote_receiver.cpp)
+#target_link_libraries(${PROJECT_NAME}_remote_receiver ${catkin_LIBRARIES})
 
 # Visualization Tools Library
 add_library(${PROJECT_NAME}
@@ -176,6 +188,7 @@ install(
     ${PROJECT_NAME}_imarker_simple
     ${PROJECT_NAME}_remote_control
     ${PROJECT_NAME}_map
+#    ${PROJECT_NAME}_remote_receiver
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
 )

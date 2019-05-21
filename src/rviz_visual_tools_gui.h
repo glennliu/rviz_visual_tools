@@ -53,7 +53,8 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 
-#include <rviz_visual_tools/remote_reciever.h>
+#include "../include/rviz_visual_tools/remote_receiver.h"
+//#include <rviz_visual_tools/teach_cmd.h>
 
 class QLineEdit;
 class QSpinBox;
@@ -82,13 +83,18 @@ protected Q_SLOTS:
   void moveRepeat();
   void moveMain();
 
-  void moveTeachStart();
-  void moveTeachFinish();
-  void moveTeachReset();
+  void moveTeachLoadPath();
+  void moveTeachJoyInit();
+  void moveTeachJoyFinish();
+
+  void moveRepeatGo();
+  void moveRepeatLand();
 
 protected:
-    QHBoxLayout* menuLayout = new QHBoxLayout;
-    QVBoxLayout* mainLayout = new QVBoxLayout;
+    QHBoxLayout* menuLayout;// = new QHBoxLayout;
+    QHBoxLayout* teachLayout; // = new QHBoxLayout;
+    QHBoxLayout* repeatLayout;
+    QVBoxLayout* mainLayout;// = new QVBoxLayout;
 
 
 
@@ -99,11 +105,14 @@ protected:
   QPushButton* btn_back2main;
 
   QPushButton* btn_teach_load_path;
-  QPushButton* btn_teach_handheld;
-  QPushButton* btn_teach_joystick;
+  QPushButton* btn_teach_joyinit;
+  QPushButton* btn_teach_joyfinish;
   QPushButton* btn_teach_reset;
 
-  RemoteReciever remote_reciever_;
+  QPushButton* btn_repeat_go;
+  QPushButton* btn_repeat_land;
+
+  RemoteReciever remote_receiver;
 };
 
 }  // end namespace rviz_visual_tools

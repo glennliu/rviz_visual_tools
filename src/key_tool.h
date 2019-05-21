@@ -39,7 +39,7 @@
 #include <QObject>
 #endif
 
-#include <rviz_visual_tools/remote_reciever.h>
+#include "../include/rviz_visual_tools/remote_receiver.h"
 
 namespace rviz_visual_tools
 {

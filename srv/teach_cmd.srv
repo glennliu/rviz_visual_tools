@@ -1,0 +1,5 @@
+uint8 cmd_i
+uint8 cmd_s
+---
+bool success
+string message
