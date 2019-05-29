@@ -127,7 +127,7 @@ namespace rviz_visual_tools {
 
         btn_teach_reset = new QPushButton(this);
         btn_teach_reset->setText("Reset");
-        connect(btn_teach_reset, SIGNAL(clicked()), this, SLOT(moveTeachJoystick()));
+        connect(btn_teach_reset, SIGNAL(clicked()), this, SLOT(moveTeachJoyReset()));
 
 
         btn_back2main = new QPushButton(this);
@@ -149,8 +149,8 @@ namespace rviz_visual_tools {
 
         btn_teach_load_path->setEnabled(true);
         btn_teach_joyinit->setEnabled(true);
-        btn_teach_joyfinish->setEnabled(true);
-        btn_teach_reset->setEnabled(true);
+        btn_teach_joyfinish->setDisabled(true);
+        btn_teach_reset->setDisabled(true);
         btn_back2main->setEnabled(true);
     }
 
@@ -179,13 +179,22 @@ namespace rviz_visual_tools {
         repeatLayout->addWidget(btn_back2main);
         mainLayout->addLayout(repeatLayout);
         setLayout(mainLayout);
+
+        btn_repeat_land->setDisabled(true);
     }
 
     void RvizVisualToolsGui::moveRepeatGo() {
+        btn_back2main->setDisabled(true);
+        btn_repeat_land->setEnabled(true);
+        btn_repeat_go->setDisabled(true);
         remote_receiver.RepeatGo();
+
     }
 
     void RvizVisualToolsGui::moveRepeatLand(){
+        btn_back2main->setEnabled(true);
+        btn_repeat_go->setEnabled(true);
+        btn_repeat_land->setDisabled(true);
         remote_receiver.RepeatLand();
     }
 
@@ -200,7 +209,8 @@ namespace rviz_visual_tools {
         gui_state_ = remote_receiver.check_gui_state();
         ROS_INFO("%f",gui_state_.data);
 
-        if (gui_state_.data == "TEACH_INIT" || gui_state_.data == "TEACH_FINISHED"){
+        if (gui_state_.data == "TEACH_INIT"
+                               || gui_state_.data == "TEACH_FINISHED" || gui_state_.data =="TEACH_LOAD_FILE"){
 
             // remove teach layout
             delete (btn_teach_load_path);
@@ -222,16 +232,35 @@ namespace rviz_visual_tools {
         delete(btn_back2main);
         setLayout(mainLayout);
         remote_receiver.back2main();
+    }
 
-
+    void RvizVisualToolsGui::moveTeachLoadPath() {
+        remote_receiver.TeachLoadPath();
+        btn_teach_joyinit->setDisabled(true);
+        btn_teach_reset->setEnabled(true);
     }
 
     void RvizVisualToolsGui::moveTeachJoyInit(){
         remote_receiver.TeachJoyInit();
+        btn_teach_load_path->setDisabled(true);
+        btn_back2main->setDisabled(true);
+        btn_teach_reset->setEnabled(true);
+        btn_teach_joyfinish->setEnabled(true);
     }
 
     void RvizVisualToolsGui::moveTeachJoyFinish() {
         remote_receiver.TeachJoyFinish();
+        btn_teach_load_path->setEnabled(true);
+        btn_back2main->setEnabled(true);
+    }
+
+    void RvizVisualToolsGui::moveTeachJoyReset() {
+        btn_teach_load_path->setEnabled(true);
+        btn_back2main->setEnabled(true);
+        btn_teach_joyfinish->setDisabled(true);
+        btn_teach_reset->setDisabled(true);
+
+        remote_receiver.TeachJoyReset();
     }
 
     void RvizVisualToolsGui::save(rviz::Config config) const {

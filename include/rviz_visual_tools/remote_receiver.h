@@ -42,6 +42,7 @@
 #include <sensor_msgs/Joy.h>
 #include <std_srvs/SetBool.h>
 #include <std_msgs/String.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <ros/ros.h>
 #include <mav_cmd_enum.h>
 
@@ -57,10 +58,16 @@ namespace rviz_visual_tools
         {
             joy_publisher_ = nh_.advertise<sensor_msgs::Joy>("/rviz_visual_tools_gui", 1);
             gui_state_pub_ = nh_.advertise<std_msgs::String>("/gui_state", 1);
+            traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
 
             joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
-            teach_joy_init = nh_.serviceClient<std_srvs::SetBool>("teach_init");
-            teach_joy_finish = nh_.serviceClient<std_srvs::SetBool>("teach_finish");
+            teach_joy_init = nh_.serviceClient<std_srvs::SetBool>("/teach_init");
+            teach_joy_finish = nh_.serviceClient<std_srvs::SetBool>("/teach_finish");
+            teach_load_path = nh_.serviceClient<std_srvs::SetBool>("/teach_load_file");
+            teach_joy_reset = nh_.serviceClient<std_srvs::SetBool>("/teach_joy_reset");
+            joyNode_reset = nh_.serviceClient<std_srvs::SetBool>("/joy_reset");
+            odom_visual_reset_srv = nh_.serviceClient<std_srvs::SetBool>("/odom_reset");
+
 
             gui_state_msg.data = "MAIN_MENU";
             gui_state_pub_.publish(gui_state_msg);
@@ -77,12 +84,23 @@ namespace rviz_visual_tools
             gui_state_pub_.publish(gui_state_msg);
         }
 
+        void TeachLoadPath(){
+            gui_state_msg.data = "TEACH_LOAD_FILE";
+            gui_state_pub_.publish(gui_state_msg);
+
+            std_srvs::SetBool teach_cmd;
+            teach_cmd.request.data = true;
+            teach_load_path.call(teach_cmd);
+        }
+
         void TeachJoyInit(){
             gui_state_msg.data = "TEACH_RUNNING";
             gui_state_pub_.publish(gui_state_msg);
 
             std_srvs::SetBool teach_cmd;
             teach_cmd.request.data = true;
+//            odom_visual_reset_srv.call(teach_cmd);
+//            joyNode_reset.call(teach_cmd);
             teach_joy_init.call(teach_cmd);
         }
 
@@ -95,9 +113,25 @@ namespace rviz_visual_tools
             teach_joy_finish.call(teach_cmd);
         }
 
+        void TeachJoyReset(){
+            gui_state_msg.data = "TEACH_INIT";
+            gui_state_pub_.publish(gui_state_msg);
+
+            std_srvs::SetBool teach_reset_cmd;
+            teach_reset_cmd.request.data = true;
+            teach_joy_reset.call(teach_reset_cmd);
+            odom_visual_reset_srv.call(teach_reset_cmd);
+            joyNode_reset.call(teach_reset_cmd);
+
+        }
+
         void RepeatGo(){
             gui_state_msg.data = "REPEAT_RUNNING";
             gui_state_pub_.publish(gui_state_msg);
+
+            geometry_msgs::PoseStamped pose_msg;
+            pose_msg.header.stamp = ros::Time::now();
+            traj_start_trigger.publish(pose_msg);
         }
 
         void RepeatLand(){
@@ -162,9 +196,11 @@ namespace rviz_visual_tools
         // The ROS publishers
         ros::Publisher joy_publisher_;
         ros::Publisher gui_state_pub_;
+        ros::Publisher traj_start_trigger;
 
         // The ROS Services
-        ros::ServiceClient joy_client_, teach_joy_init, teach_joy_finish;
+        ros::ServiceClient joy_client_, teach_load_path, teach_joy_init,
+                teach_joy_finish, teach_joy_reset, odom_visual_reset_srv,joyNode_reset;
         ros::ServiceServer joy_server_;
 
         // The ROS node handle.

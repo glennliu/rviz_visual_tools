@@ -86,6 +86,7 @@ protected Q_SLOTS:
   void moveTeachLoadPath();
   void moveTeachJoyInit();
   void moveTeachJoyFinish();
+  void moveTeachJoyReset();
 
   void moveRepeatGo();
   void moveRepeatLand();
