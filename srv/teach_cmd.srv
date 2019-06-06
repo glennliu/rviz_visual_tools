@@ -1,5 +1,5 @@
-uint8 cmd_i
-uint8 cmd_s
+uint8 cmd_code
+string base_cmd
 ---
 bool success
 string message

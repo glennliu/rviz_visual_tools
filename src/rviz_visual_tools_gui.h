@@ -55,6 +55,9 @@
 
 #include "../include/rviz_visual_tools/remote_receiver.h"
 //#include <rviz_visual_tools/teach_cmd.h>
+//#include <rviz_visual_tools/teach_cmd.h>
+
+#include <std_msgs/Int16.h>
 
 class QLineEdit;
 class QSpinBox;
@@ -83,6 +86,9 @@ protected Q_SLOTS:
   void moveRepeat();
   void moveMain();
 
+  void moveMapStart();
+  void moveMapFinished();
+
   void moveTeachLoadPath();
   void moveTeachJoyInit();
   void moveTeachJoyFinish();
@@ -91,8 +97,13 @@ protected Q_SLOTS:
   void moveRepeatGo();
   void moveRepeatLand();
 
+//  void repeat_init_check_callback(const std_msgs::Int16 &msg){
+//      ROS_INFO("FLAG!!!");
+//  }
+
 protected:
     QHBoxLayout* menuLayout;// = new QHBoxLayout;
+    QHBoxLayout* mapLayout;
     QHBoxLayout* teachLayout; // = new QHBoxLayout;
     QHBoxLayout* repeatLayout;
     QVBoxLayout* mainLayout;// = new QVBoxLayout;
@@ -105,6 +116,9 @@ protected:
   QPushButton* btn_repeat;
   QPushButton* btn_back2main;
 
+  QPushButton* btn_map_init;
+  QPushButton* btn_map_finish;
+
   QPushButton* btn_teach_load_path;
   QPushButton* btn_teach_joyinit;
   QPushButton* btn_teach_joyfinish;
@@ -112,6 +126,8 @@ protected:
 
   QPushButton* btn_repeat_go;
   QPushButton* btn_repeat_land;
+
+//  ros::Subscriber repeat_init_check;
 
   RemoteReciever remote_receiver;
 };

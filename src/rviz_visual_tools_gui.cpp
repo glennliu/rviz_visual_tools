@@ -101,8 +101,33 @@ namespace rviz_visual_tools {
     }
 
     void RvizVisualToolsGui::moveMapping() {
-//  remote_receiver.publishNext();
+        remote_receiver.EnterMap();
 
+        btn_teach->setDisabled(true);
+        btn_repeat->setDisabled(true);
+
+        btn_map_init = new QPushButton(this);
+        btn_map_init->setText("Start");
+        connect(btn_map_init,SIGNAL(clicked()),this,SLOT(moveMapStart()));
+
+        btn_map_finish = new QPushButton(this);
+        btn_map_finish->setText("Finish");
+        connect(btn_map_finish,SIGNAL(clicked()),this,SLOT(moveMapFinished()));
+
+        btn_back2main = new QPushButton(this);
+        btn_back2main->setText("GoBack");
+        connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
+
+        mapLayout = new QHBoxLayout;
+        mapLayout->addWidget(btn_map_init);
+        mapLayout->addWidget(btn_map_finish);
+        mapLayout->addWidget(btn_back2main);
+        mainLayout->addLayout(mapLayout);
+        setLayout(mainLayout);
+
+        btn_map_init->setEnabled(true);
+        btn_back2main->setEnabled(true);
+        btn_map_finish->setDisabled(true);
     }
 
     void RvizVisualToolsGui::moveTeach() {
@@ -181,9 +206,33 @@ namespace rviz_visual_tools {
         setLayout(mainLayout);
 
         btn_repeat_land->setDisabled(true);
+
+//        std_msgs::Int16 repeat_flag_msg = remote_receiver.check_repeat_flag();
+//
+//        switch (repeat_flag_msg.data){
+//            case 0:
+//                btn_repeat_go->setDisabled(true);
+//            case 1:
+//                btn_repeat_go->setEnabled(true);
+//                break;
+//        }
     }
 
-    void RvizVisualToolsGui::moveRepeatGo() {
+    void RvizVisualToolsGui::moveMapStart() {
+        btn_map_finish->setEnabled(true);
+        btn_map_init->setDisabled(true);
+        remote_receiver.MapBuilding();
+    }
+
+    void RvizVisualToolsGui::moveMapFinished(){
+        btn_map_init->setEnabled(true);
+        btn_map_finish->setDisabled(true);
+
+        remote_receiver.MapFinished();
+    }
+
+
+        void RvizVisualToolsGui::moveRepeatGo() {
         btn_back2main->setDisabled(true);
         btn_repeat_land->setEnabled(true);
         btn_repeat_go->setDisabled(true);
@@ -219,12 +268,17 @@ namespace rviz_visual_tools {
             delete (btn_teach_reset);
             delete (teachLayout);
         }
-        else if(gui_state_.data == "REPEAT_INIT" || gui_state_.data == "REPEAT_LAND")
-        {
+        else if(gui_state_.data == "REPEAT_INIT" || gui_state_.data == "REPEAT_LAND") {
             // remove repeat layout
             delete(btn_repeat_go);
             delete(btn_repeat_land);
             delete(repeatLayout);
+        }
+        else if(gui_state_.data =="MAP_INIT" || gui_state_.data =="MAP_BUILDING"
+                ||gui_state_.data =="MAP_FINISHED"){
+            delete(btn_map_init);
+            delete(btn_map_finish);
+            delete(mapLayout);
         }
 
 

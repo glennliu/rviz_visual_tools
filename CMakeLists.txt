@@ -27,7 +27,8 @@ find_package(catkin REQUIRED COMPONENTS
   tf_conversions
   trajectory_msgs
   visualization_msgs
-  message_generation
+  decomp_ros_msgs
+#  message_generation
 )
 
 find_package(Eigen3 REQUIRED)
@@ -56,6 +57,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOMOC_COMPILER_PREDEFINES OFF)
 add_definitions(-DQT_NO_KEYWORDS)
 
+#add_service_files(DIRECTORY srv FILES teach_cmd.srv)
+
+#generate_messages(
+#    DEPENDENCIES
+#    std_msgs
+#)
+
 catkin_package(
   LIBRARIES
     ${PROJECT_NAME}
@@ -74,6 +82,7 @@ catkin_package(
     tf_conversions
     trajectory_msgs
     visualization_msgs
+    message_runtime
   INCLUDE_DIRS
     include
     ${OGRE_OV_INCLUDE_DIRS}
@@ -85,10 +94,10 @@ include_directories(SYSTEM include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS}
 ## Build ##
 ###########
 
-#add_service_files(
-#        FILES
-#        teach_cmd.srv
-#)
+
+
+
+
 
 set(SOURCE_FILES
   src/${PROJECT_NAME}_gui.cpp
@@ -98,6 +107,7 @@ set(SOURCE_FILES
 # Rviz GUI library
 add_library(${PROJECT_NAME}_gui ${SOURCE_FILES} src/remote_control.cpp)
 target_link_libraries(${PROJECT_NAME}_gui ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+#add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
 
 # Mapping Panel Library
 add_library(${PROJECT_NAME}_map src/rviz_visual_tools_map.cpp src/key_tool.cpp src/remote_control.cpp)
