@@ -50,6 +50,7 @@
 #include <QtWidgets/QtWidgets>
 
 #include "rviz_visual_tools_gui.h"
+#include "include/rviz_visual_tools/mav_cmd_enum.h"
 
 namespace rviz_visual_tools {
 //    auto *layout = new QVBoxLayout;
@@ -67,9 +68,9 @@ namespace rviz_visual_tools {
         connect(btn_teach, SIGNAL(clicked()), this, SLOT(moveTeach()));
 
         // Create a push button
-        btn_optimize = new QPushButton(this);
-        btn_optimize->setText("Optimize");
-        connect(btn_optimize, SIGNAL(clicked()), this, SLOT(moveOptimize()));
+//        btn_optimize = new QPushButton(this);
+//        btn_optimize->setText("Optimize");
+//        connect(btn_optimize, SIGNAL(clicked()), this, SLOT(moveOptimize()));
 
         // Create a push button
         btn_repeat = new QPushButton(this);
@@ -80,7 +81,7 @@ namespace rviz_visual_tools {
         menuLayout = new QHBoxLayout;
         menuLayout->addWidget(btn_mapping);
         menuLayout->addWidget(btn_teach);
-        menuLayout->addWidget(btn_optimize);
+//        menuLayout->addWidget(btn_optimize);
         menuLayout->addWidget(btn_repeat);
 
         // Verticle layout
@@ -91,12 +92,10 @@ namespace rviz_visual_tools {
 
         btn_mapping->setEnabled(true);
         btn_teach->setEnabled(true);
-        btn_optimize->setEnabled(true);
+//        btn_optimize->setEnabled(true);
         btn_repeat->setEnabled(true);
 
 //        delete(menuLayout);
-
-
 
     }
 
@@ -135,12 +134,7 @@ namespace rviz_visual_tools {
 
         //
         btn_mapping->setDisabled(true);
-        btn_optimize->setDisabled(true);
         btn_repeat->setDisabled(true);
-
-        btn_teach_load_path = new QPushButton(this);
-        btn_teach_load_path->setText("LoadPath");
-        connect(btn_teach_load_path, SIGNAL(clicked()), this, SLOT(moveTeachLoadPath()));
 
         btn_teach_joyinit = new QPushButton(this);
         btn_teach_joyinit->setText("JoyInit");
@@ -154,17 +148,14 @@ namespace rviz_visual_tools {
         btn_teach_reset->setText("Reset");
         connect(btn_teach_reset, SIGNAL(clicked()), this, SLOT(moveTeachJoyReset()));
 
-
         btn_back2main = new QPushButton(this);
         btn_back2main->setText("GoBack");
         connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
 
 
-
         // Horizontal Layout2: Teach
 //        auto *teachLayout = new QHBoxLayout;
         teachLayout = new QHBoxLayout;
-        teachLayout->addWidget(btn_teach_load_path);
         teachLayout->addWidget(btn_teach_joyinit);
         teachLayout->addWidget(btn_teach_joyfinish);
         teachLayout->addWidget(btn_teach_reset);
@@ -172,7 +163,6 @@ namespace rviz_visual_tools {
         mainLayout->addLayout(teachLayout);
         setLayout(mainLayout);
 
-        btn_teach_load_path->setEnabled(true);
         btn_teach_joyinit->setEnabled(true);
         btn_teach_joyfinish->setDisabled(true);
         btn_teach_reset->setDisabled(true);
@@ -185,6 +175,12 @@ namespace rviz_visual_tools {
 
     void RvizVisualToolsGui::moveRepeat() {
         remote_receiver.EnterRepeat();
+        btn_mapping->setDisabled(true);
+        btn_teach->setDisabled(true);
+
+        btn_repeat_load = new QPushButton(this);
+        btn_repeat_load->setText("LoadPath");
+        connect(btn_repeat_load, SIGNAL(clicked()), this, SLOT(moveRepeatLoad()));
 
         btn_repeat_go = new QPushButton(this);
         btn_repeat_go->setText("Go");
@@ -194,28 +190,29 @@ namespace rviz_visual_tools {
         btn_repeat_land->setText("Land");
         connect(btn_repeat_land, SIGNAL(clicked()), this, SLOT(moveRepeatLand()));
 
+        btn_repeat_reset = new QPushButton(this);
+        btn_repeat_reset->setText("Reset");
+        connect(btn_repeat_reset, SIGNAL(clicked()), this, SLOT(moveRepeatReset()));
+
         btn_back2main = new QPushButton(this);
         btn_back2main->setText("GoBack");
         connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
 
         repeatLayout = new QHBoxLayout;
+        repeatLayout->addWidget(btn_repeat_load);
         repeatLayout->addWidget(btn_repeat_go);
         repeatLayout->addWidget(btn_repeat_land);
+        repeatLayout->addWidget(btn_repeat_reset);
         repeatLayout->addWidget(btn_back2main);
         mainLayout->addLayout(repeatLayout);
         setLayout(mainLayout);
 
+        btn_repeat_load->setEnabled(true);
+        btn_back2main->setEnabled(true);
+        btn_repeat_go->setDisabled(true);
         btn_repeat_land->setDisabled(true);
+        btn_repeat_reset->setDisabled(true);
 
-//        std_msgs::Int16 repeat_flag_msg = remote_receiver.check_repeat_flag();
-//
-//        switch (repeat_flag_msg.data){
-//            case 0:
-//                btn_repeat_go->setDisabled(true);
-//            case 1:
-//                btn_repeat_go->setEnabled(true);
-//                break;
-//        }
     }
 
     void RvizVisualToolsGui::moveMapStart() {
@@ -231,8 +228,14 @@ namespace rviz_visual_tools {
         remote_receiver.MapFinished();
     }
 
+    void RvizVisualToolsGui::moveRepeatLoad(){
+        remote_receiver.TeachLoadPath();
+        btn_back2main->setDisabled(true);
+        btn_repeat_load->setDisabled(true);
+        btn_repeat_reset->setEnabled(true);
+    }
 
-        void RvizVisualToolsGui::moveRepeatGo() {
+    void RvizVisualToolsGui::moveRepeatGo() {
         btn_back2main->setDisabled(true);
         btn_repeat_land->setEnabled(true);
         btn_repeat_go->setDisabled(true);
@@ -247,11 +250,18 @@ namespace rviz_visual_tools {
         remote_receiver.RepeatLand();
     }
 
+    void RvizVisualToolsGui::moveRepeatReset(){
+        btn_back2main->setEnabled(true);
+        btn_repeat_load->setEnabled(true);
+        btn_repeat_go->setDisabled(true);
+        btn_repeat_land->setDisabled(true);
+        remote_receiver.RepeatReset();
+    }
+
     void RvizVisualToolsGui::moveMain() {
 
         btn_mapping->setEnabled(true);
         btn_teach->setEnabled(true);
-        btn_optimize->setEnabled(true);
         btn_repeat->setEnabled(true);
 
         std_msgs::String gui_state_;
@@ -262,7 +272,6 @@ namespace rviz_visual_tools {
                                || gui_state_.data == "TEACH_FINISHED" || gui_state_.data =="TEACH_LOAD_FILE"){
 
             // remove teach layout
-            delete (btn_teach_load_path);
             delete (btn_teach_joyinit);
             delete (btn_teach_joyfinish);
             delete (btn_teach_reset);
@@ -270,8 +279,10 @@ namespace rviz_visual_tools {
         }
         else if(gui_state_.data == "REPEAT_INIT" || gui_state_.data == "REPEAT_LAND") {
             // remove repeat layout
+            delete(btn_repeat_load);
             delete(btn_repeat_go);
             delete(btn_repeat_land);
+            delete(btn_repeat_reset);
             delete(repeatLayout);
         }
         else if(gui_state_.data =="MAP_INIT" || gui_state_.data =="MAP_BUILDING"
@@ -281,22 +292,14 @@ namespace rviz_visual_tools {
             delete(mapLayout);
         }
 
-
-        //
         delete(btn_back2main);
         setLayout(mainLayout);
         remote_receiver.back2main();
     }
 
-    void RvizVisualToolsGui::moveTeachLoadPath() {
-        remote_receiver.TeachLoadPath();
-        btn_teach_joyinit->setDisabled(true);
-        btn_teach_reset->setEnabled(true);
-    }
-
     void RvizVisualToolsGui::moveTeachJoyInit(){
         remote_receiver.TeachJoyInit();
-        btn_teach_load_path->setDisabled(true);
+        btn_teach_joyinit->setDisabled(true);
         btn_back2main->setDisabled(true);
         btn_teach_reset->setEnabled(true);
         btn_teach_joyfinish->setEnabled(true);
@@ -304,18 +307,18 @@ namespace rviz_visual_tools {
 
     void RvizVisualToolsGui::moveTeachJoyFinish() {
         remote_receiver.TeachJoyFinish();
-        btn_teach_load_path->setEnabled(true);
         btn_back2main->setEnabled(true);
     }
 
     void RvizVisualToolsGui::moveTeachJoyReset() {
-        btn_teach_load_path->setEnabled(true);
         btn_back2main->setEnabled(true);
+        btn_teach_joyinit->setEnabled(true);
         btn_teach_joyfinish->setDisabled(true);
         btn_teach_reset->setDisabled(true);
 
         remote_receiver.TeachJoyReset();
     }
+
 
     void RvizVisualToolsGui::save(rviz::Config config) const {
         rviz::Panel::save(config);

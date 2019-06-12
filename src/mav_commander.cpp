@@ -5,7 +5,7 @@
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
 #include <std_srvs/SetBool.h>
-#include <include/mav_cmd_enum.h>
+#include <include/rviz_visual_tools/mav_cmd_enum.h>
 
 ros::Publisher vis_pub;
 ros::ServiceServer cmd_server;

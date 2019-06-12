@@ -64,73 +64,77 @@ class QSpinBox;
 
 namespace rviz_visual_tools
 {
-class RvizVisualToolsGui : public rviz::Panel
-{
-  Q_OBJECT
-public:
+    class RvizVisualToolsGui : public rviz::Panel
+    {
+    Q_OBJECT
+    public:
 
 //    auto* layout = new QVBoxLayout;
 //    auto* hlayout1 = new QHBoxLayout;
-  explicit RvizVisualToolsGui(QWidget* parent = 0);
+        explicit RvizVisualToolsGui(QWidget* parent = 0);
 
-  virtual void load(const rviz::Config& config);
-  virtual void save(rviz::Config config) const;
+        virtual void load(const rviz::Config& config);
+        virtual void save(rviz::Config config) const;
 
-public Q_SLOTS:
+    public Q_SLOTS:
 
-protected Q_SLOTS:
+    protected Q_SLOTS:
 
-  void moveMapping();
-  void moveTeach();
-  void moveOptimize();
-  void moveRepeat();
-  void moveMain();
+        void moveMapping();
+        void moveTeach();
+        void moveOptimize();
+        void moveRepeat();
+        void moveMain();
 
-  void moveMapStart();
-  void moveMapFinished();
+        void moveMapStart();
+        void moveMapFinished();
 
-  void moveTeachLoadPath();
-  void moveTeachJoyInit();
-  void moveTeachJoyFinish();
-  void moveTeachJoyReset();
+        void moveTeachLoadPath();
+        void moveTeachJoyInit();
+        void moveTeachJoyFinish();
+        void moveTeachJoyReset();
 
-  void moveRepeatGo();
-  void moveRepeatLand();
+        void moveRepeatLoad();
+        void moveRepeatGo();
+        void moveRepeatLand();
+        void moveRepeatReset();
+
+        void disableMainMenu();
 
 //  void repeat_init_check_callback(const std_msgs::Int16 &msg){
 //      ROS_INFO("FLAG!!!");
 //  }
 
-protected:
-    QHBoxLayout* menuLayout;// = new QHBoxLayout;
-    QHBoxLayout* mapLayout;
-    QHBoxLayout* teachLayout; // = new QHBoxLayout;
-    QHBoxLayout* repeatLayout;
-    QVBoxLayout* mainLayout;// = new QVBoxLayout;
+    protected:
+        QHBoxLayout* menuLayout;// = new QHBoxLayout;
+        QHBoxLayout* mapLayout;
+        QHBoxLayout* teachLayout; // = new QHBoxLayout;
+        QHBoxLayout* repeatLayout;
+        QVBoxLayout* mainLayout;// = new QVBoxLayout;
 
+        QPushButton* btn_mapping;
+        QPushButton* btn_teach;
+//  QPushButton* btn_optimize;
+        QPushButton* btn_repeat;
+        QPushButton* btn_back2main;
 
+        QPushButton* btn_map_init;
+        QPushButton* btn_map_finish;
 
-    QPushButton* btn_mapping;
-  QPushButton* btn_teach;
-  QPushButton* btn_optimize;
-  QPushButton* btn_repeat;
-  QPushButton* btn_back2main;
+//  QPushButton* btn_teach_load_path;
+        QPushButton* btn_teach_joyinit;
+        QPushButton* btn_teach_joyfinish;
+        QPushButton* btn_teach_reset;
 
-  QPushButton* btn_map_init;
-  QPushButton* btn_map_finish;
-
-  QPushButton* btn_teach_load_path;
-  QPushButton* btn_teach_joyinit;
-  QPushButton* btn_teach_joyfinish;
-  QPushButton* btn_teach_reset;
-
-  QPushButton* btn_repeat_go;
-  QPushButton* btn_repeat_land;
+        QPushButton* btn_repeat_load;
+        QPushButton* btn_repeat_go;
+        QPushButton* btn_repeat_land;
+        QPushButton* btn_repeat_reset;
 
 //  ros::Subscriber repeat_init_check;
 
-  RemoteReciever remote_receiver;
-};
+        RemoteReciever remote_receiver;
+    };
 
 }  // end namespace rviz_visual_tools
 
