@@ -67,22 +67,23 @@ namespace rviz_visual_tools {
         btn_teach->setText("Teach");
         connect(btn_teach, SIGNAL(clicked()), this, SLOT(moveTeach()));
 
-        // Create a push button
-//        btn_optimize = new QPushButton(this);
-//        btn_optimize->setText("Optimize");
-//        connect(btn_optimize, SIGNAL(clicked()), this, SLOT(moveOptimize()));
 
         // Create a push button
         btn_repeat = new QPushButton(this);
         btn_repeat->setText("Repeat");
         connect(btn_repeat, SIGNAL(clicked()), this, SLOT(moveRepeat()));
 
+        // Create a push button
+        btn_airborne = new QPushButton(this);
+        btn_airborne->setText("Airborne");
+        connect(btn_airborne, SIGNAL(clicked()), this, SLOT(moveAirborne()));
+
         // Horizontal Layout1: Menu
         menuLayout = new QHBoxLayout;
         menuLayout->addWidget(btn_mapping);
         menuLayout->addWidget(btn_teach);
-//        menuLayout->addWidget(btn_optimize);
         menuLayout->addWidget(btn_repeat);
+        menuLayout->addWidget(btn_airborne);
 
         // Verticle layout
 //        auto *layout = new QVBoxLayout;
@@ -92,8 +93,8 @@ namespace rviz_visual_tools {
 
         btn_mapping->setEnabled(true);
         btn_teach->setEnabled(true);
-//        btn_optimize->setEnabled(true);
         btn_repeat->setEnabled(true);
+        btn_airborne->setEnabled(true);
 
 //        delete(menuLayout);
 
@@ -169,9 +170,7 @@ namespace rviz_visual_tools {
         btn_back2main->setEnabled(true);
     }
 
-    void RvizVisualToolsGui::moveOptimize(){
-//  remote_receiver.publishBreak();
-    }
+
 
     void RvizVisualToolsGui::moveRepeat() {
         remote_receiver.EnterRepeat();
@@ -212,6 +211,37 @@ namespace rviz_visual_tools {
         btn_repeat_go->setDisabled(true);
         btn_repeat_land->setDisabled(true);
         btn_repeat_reset->setDisabled(true);
+
+    }
+
+    void RvizVisualToolsGui::moveAirborne() {
+        remote_receiver.EnterAirborne();
+
+        btn_mapping->setDisabled(true);
+        btn_teach->setDisabled(true);
+        btn_repeat->setDisabled(true);
+
+        btn_airborne_init = new QPushButton(this);
+        btn_airborne_init->setText("Init");
+        connect(btn_airborne_init, SIGNAL(clicked()), this, SLOT(moveAirborneInit()));
+
+        btn_airborn_finished = new QPushButton(this);
+        btn_airborn_finished->setText("Finish");
+        connect(btn_airborn_finished, SIGNAL(clicked()), this, SLOT(moveAirborneFinish()));
+
+        btn_back2main = new QPushButton(this);
+        btn_back2main->setText("GoBack");
+        connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
+
+        airborneLayout = new QHBoxLayout;
+        airborneLayout->addWidget(btn_airborne_init);
+        airborneLayout->addWidget(btn_airborn_finished);
+        airborneLayout->addWidget(btn_back2main);
+        mainLayout->addLayout(airborneLayout);
+        setLayout(mainLayout);
+        btn_airborne_init->setEnabled(true);
+        btn_airborn_finished->setDisabled(true);
+        btn_back2main->setEnabled(true);
 
     }
 
@@ -291,6 +321,11 @@ namespace rviz_visual_tools {
             delete(btn_map_finish);
             delete(mapLayout);
         }
+        else if(gui_state_.data == "AIRBORNE"){
+            delete(btn_airborne_init);
+            delete(btn_airborn_finished);
+            delete(airborneLayout);
+        }
 
         delete(btn_back2main);
         setLayout(mainLayout);
@@ -317,6 +352,19 @@ namespace rviz_visual_tools {
         btn_teach_reset->setDisabled(true);
 
         remote_receiver.TeachJoyReset();
+    }
+
+    void RvizVisualToolsGui::moveAirborneInit() {
+        remote_receiver.airborneInit();
+        btn_airborne_init->setDisabled(true);
+        btn_airborn_finished->setEnabled(true);
+    }
+
+    void RvizVisualToolsGui::moveAirborneFinish() {
+        remote_receiver.airborneFinished();
+//        btn_airborne_init->setEnabled(true);
+        btn_airborn_finished->setDisabled(true);
+
     }
 
 

@@ -75,6 +75,7 @@ namespace rviz_visual_tools
             surf_fusion_srv = nh_.serviceClient<decomp_ros_msgs::cmd>("/surf_map_cmd");
             map_server_srv = nh_.serviceClient<std_srvs::SetBool>("/map_server_init");
             map_server_save_srv = nh_.serviceClient<std_srvs::SetBool>("/map_server_save");
+            airborne_srv = nh_.serviceClient<decomp_ros_msgs::cmd>("/airborne_cmd");
 
 //            repeat_init_switch = nh_.subscribe("/repeat_go_precheck",1,repeat_init_check_callback);
 
@@ -192,6 +193,23 @@ namespace rviz_visual_tools
             teach_node_cmd.call(teach_cmd_msg);
         }
 
+        void EnterAirborne(){
+            gui_state_msg.data = "AIRBORNE";
+            gui_state_pub_.publish(gui_state_msg);
+        }
+
+        void airborneInit(){
+            decomp_ros_msgs::cmd cmd_srv;
+            cmd_srv.request.cmd_code = MAV_CMD_INIT;
+            airborne_srv.call(cmd_srv);
+        }
+
+        void airborneFinished(){
+            decomp_ros_msgs::cmd cmd_srv;
+            cmd_srv.request.cmd_code = MAV_CMD_FINISH;
+            airborne_srv.call(cmd_srv);
+        }
+
         void back2main(){
             gui_state_msg.data  = "MAIN_MENU";
             gui_state_pub_.publish(gui_state_msg);
@@ -268,7 +286,8 @@ namespace rviz_visual_tools
         // The ROS Services
         ros::ServiceClient joy_client_, teach_load_path, teach_node_cmd,
                 odom_visual_reset_srv, joyNode_reset, joyCtrl_srv,
-                surf_fusion_srv, map_server_srv, map_server_save_srv;
+                surf_fusion_srv, map_server_srv, map_server_save_srv,
+                airborne_srv;
         ros::ServiceServer joy_server_;
 
         // The ROS node handle.

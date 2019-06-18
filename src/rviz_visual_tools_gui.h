@@ -82,8 +82,9 @@ namespace rviz_visual_tools
 
         void moveMapping();
         void moveTeach();
-        void moveOptimize();
+//        void moveOptimize();
         void moveRepeat();
+        void moveAirborne();
         void moveMain();
 
         void moveMapStart();
@@ -99,6 +100,9 @@ namespace rviz_visual_tools
         void moveRepeatLand();
         void moveRepeatReset();
 
+        void moveAirborneInit();
+        void moveAirborneFinish();
+
         void disableMainMenu();
 
 //  void repeat_init_check_callback(const std_msgs::Int16 &msg){
@@ -110,18 +114,18 @@ namespace rviz_visual_tools
         QHBoxLayout* mapLayout;
         QHBoxLayout* teachLayout; // = new QHBoxLayout;
         QHBoxLayout* repeatLayout;
+        QHBoxLayout* airborneLayout;
         QVBoxLayout* mainLayout;// = new QVBoxLayout;
 
         QPushButton* btn_mapping;
         QPushButton* btn_teach;
-//  QPushButton* btn_optimize;
         QPushButton* btn_repeat;
+        QPushButton* btn_airborne;
         QPushButton* btn_back2main;
 
         QPushButton* btn_map_init;
         QPushButton* btn_map_finish;
 
-//  QPushButton* btn_teach_load_path;
         QPushButton* btn_teach_joyinit;
         QPushButton* btn_teach_joyfinish;
         QPushButton* btn_teach_reset;
@@ -130,6 +134,9 @@ namespace rviz_visual_tools
         QPushButton* btn_repeat_go;
         QPushButton* btn_repeat_land;
         QPushButton* btn_repeat_reset;
+
+        QPushButton* btn_airborne_init;
+        QPushButton* btn_airborn_finished;
 
 //  ros::Subscriber repeat_init_check;
 
