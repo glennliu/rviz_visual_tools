@@ -100,6 +100,7 @@ namespace rviz_visual_tools
         void moveRepeatLand();
         void moveRepeatReset();
 
+        void moveAirborneTakeoff();
         void moveAirborneInit();
         void moveAirborneFinish();
 
@@ -135,6 +136,7 @@ namespace rviz_visual_tools
         QPushButton* btn_repeat_land;
         QPushButton* btn_repeat_reset;
 
+        QPushButton* btn_airborne_takeoff;
         QPushButton* btn_airborne_init;
         QPushButton* btn_airborn_finished;
 

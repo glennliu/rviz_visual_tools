@@ -221,6 +221,10 @@ namespace rviz_visual_tools {
         btn_teach->setDisabled(true);
         btn_repeat->setDisabled(true);
 
+        btn_airborne_takeoff = new QPushButton(this);
+        btn_airborne_takeoff->setText("Takeoff");
+        connect(btn_airborne_takeoff, SIGNAL(clicked()), this, SLOT(moveAirborneTakeoff()));
+
         btn_airborne_init = new QPushButton(this);
         btn_airborne_init->setText("Init");
         connect(btn_airborne_init, SIGNAL(clicked()), this, SLOT(moveAirborneInit()));
@@ -234,12 +238,14 @@ namespace rviz_visual_tools {
         connect(btn_back2main, SIGNAL(clicked()), this, SLOT(moveMain()));
 
         airborneLayout = new QHBoxLayout;
+        airborneLayout->addWidget(btn_airborne_takeoff);
         airborneLayout->addWidget(btn_airborne_init);
         airborneLayout->addWidget(btn_airborn_finished);
         airborneLayout->addWidget(btn_back2main);
         mainLayout->addLayout(airborneLayout);
         setLayout(mainLayout);
-        btn_airborne_init->setEnabled(true);
+        btn_airborne_takeoff->setEnabled(true);
+        btn_airborne_init->setDisabled(true);
         btn_airborn_finished->setDisabled(true);
         btn_back2main->setEnabled(true);
 
@@ -354,7 +360,14 @@ namespace rviz_visual_tools {
         remote_receiver.TeachJoyReset();
     }
 
-    void RvizVisualToolsGui::moveAirborneInit() {
+    void RvizVisualToolsGui::moveAirborneTakeoff(){
+        remote_receiver.airborneTakeoff();
+        btn_airborne_takeoff->setDisabled(true);
+        btn_airborne_init->setEnabled(true);
+        btn_airborn_finished->setEnabled(true);
+    }
+
+        void RvizVisualToolsGui::moveAirborneInit() {
         remote_receiver.airborneInit();
         btn_airborne_init->setDisabled(true);
         btn_airborn_finished->setEnabled(true);

@@ -47,6 +47,7 @@
 #include <ros/ros.h>
 #include <decomp_ros_msgs/cmd.h>
 #include <rviz_visual_tools/mav_cmd_enum.h>
+#include <rviz_visual_tools/statedefine.h>
 
 #include <string.h>
 
@@ -63,6 +64,7 @@ namespace rviz_visual_tools
             joy_publisher_ = nh_.advertise<sensor_msgs::Joy>("/rviz_visual_tools_gui", 1);
             gui_state_pub_ = nh_.advertise<std_msgs::String>("/gui_state", 1);
             traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
+            flight_cmd_pub = nh_.advertise<std_msgs::Int16>("/flight_cmd",1);
 
             joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
             teach_node_cmd = nh_.serviceClient<decomp_ros_msgs::cmd>("/teach_cmd");
@@ -198,6 +200,12 @@ namespace rviz_visual_tools
             gui_state_pub_.publish(gui_state_msg);
         }
 
+        void airborneTakeoff(){
+            std_msgs::Int16 cmd;
+            cmd.data = MAP_BEGIN;
+            flight_cmd_pub.publish(cmd);
+        }
+
         void airborneInit(){
             decomp_ros_msgs::cmd cmd_srv;
             cmd_srv.request.cmd_code = MAV_CMD_INIT;
@@ -206,7 +214,10 @@ namespace rviz_visual_tools
 
         void airborneFinished(){
             decomp_ros_msgs::cmd cmd_srv;
+            std_msgs::Int16 cmd;
             cmd_srv.request.cmd_code = MAV_CMD_FINISH;
+            cmd.data = FINISH;
+            flight_cmd_pub.publish(cmd);
             airborne_srv.call(cmd_srv);
         }
 
@@ -278,7 +289,7 @@ namespace rviz_visual_tools
         // The ROS publishers
         ros::Publisher joy_publisher_;
         ros::Publisher gui_state_pub_;
-        ros::Publisher traj_start_trigger;
+        ros::Publisher traj_start_trigger, flight_cmd_pub;
 
         // the ROS subscriber
         ros::Subscriber repeat_init_switch;
