@@ -64,6 +64,7 @@ RemoteControl::RemoteControl(const ros::NodeHandle& nh) : nh_(nh)
 
 void RemoteControl::rvizDashboardCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
+  ROS_INFO("heheda");
   if (msg->buttons[1] != 0)
   {
     setReadyForNextStep();

@@ -75,6 +75,9 @@ namespace rviz_visual_tools
 
         virtual void load(const rviz::Config& config);
         virtual void save(rviz::Config config) const;
+        void enableTakeoff(){
+            btn_airborne_takeoff->setEnabled(true);
+        }
 
     public Q_SLOTS:
 

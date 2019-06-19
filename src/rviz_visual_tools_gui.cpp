@@ -95,9 +95,7 @@ namespace rviz_visual_tools {
         btn_teach->setEnabled(true);
         btn_repeat->setEnabled(true);
         btn_airborne->setEnabled(true);
-
 //        delete(menuLayout);
-
     }
 
     void RvizVisualToolsGui::moveMapping() {
@@ -328,6 +326,7 @@ namespace rviz_visual_tools {
             delete(mapLayout);
         }
         else if(gui_state_.data == "AIRBORNE"){
+            delete(btn_airborne_takeoff);
             delete(btn_airborne_init);
             delete(btn_airborn_finished);
             delete(airborneLayout);

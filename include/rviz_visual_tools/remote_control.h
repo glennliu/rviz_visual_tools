@@ -120,7 +120,7 @@ private:
   std::string name_ = "remote_control";
 
   // Input
-  ros::Subscriber rviz_dashboard_sub_;
+  ros::Subscriber rviz_dashboard_sub_, takeoff_flag_sub_;
 
   // Debug interface
   bool is_waiting_ = false;

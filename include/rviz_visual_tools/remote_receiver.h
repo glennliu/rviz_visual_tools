@@ -60,11 +60,11 @@ namespace rviz_visual_tools
         RemoteReciever()
         {
 
-
             joy_publisher_ = nh_.advertise<sensor_msgs::Joy>("/rviz_visual_tools_gui", 1);
             gui_state_pub_ = nh_.advertise<std_msgs::String>("/gui_state", 1);
             traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
             flight_cmd_pub = nh_.advertise<std_msgs::Int16>("/flight_cmd",1);
+//            drone_state_sub = nh_.subscribe("/demo/state",1,drone_state_cb);
 
             joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
             teach_node_cmd = nh_.serviceClient<decomp_ros_msgs::cmd>("/teach_cmd");
@@ -278,6 +278,10 @@ namespace rviz_visual_tools
 //            return repeat_flag_msg;
 //        }
 
+//        static void drone_state_cb(const std_msgs::Int16 &msg){
+//            drone_state = msg.data;
+//        }
+
         static void repeat_init_check_callback(const std_msgs::Int16 &msg){
             std_msgs::Int16 repeat_flag_msg;
             repeat_flag_msg.data = msg.data;
@@ -292,7 +296,7 @@ namespace rviz_visual_tools
         ros::Publisher traj_start_trigger, flight_cmd_pub;
 
         // the ROS subscriber
-        ros::Subscriber repeat_init_switch;
+        ros::Subscriber repeat_init_switch,drone_state_sub;
 
         // The ROS Services
         ros::ServiceClient joy_client_, teach_load_path, teach_node_cmd,
@@ -307,6 +311,7 @@ namespace rviz_visual_tools
         //
         std_msgs::String gui_state_msg;
         int16_t repeat_check_flag;
+        int16_t drone_state;
 
         //
 

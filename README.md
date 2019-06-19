@@ -14,3 +14,6 @@ Description: send takeoff and land command to drone.
 - /demo/state
 Type: std_msgs/Int16
 Description: display drone state to GUI.
+
+### Rviz
+use the /rviz/demo.rviz
