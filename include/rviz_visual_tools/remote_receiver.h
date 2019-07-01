@@ -206,10 +206,26 @@ namespace rviz_visual_tools
             flight_cmd_pub.publish(cmd);
         }
 
-        void airborneInit(){
+        void airborneMarker(){
+            gui_state_msg.data = "AIRBORNE_MARKER";
             decomp_ros_msgs::cmd cmd_srv;
+            decomp_ros_msgs::cmd joy_srv;
             cmd_srv.request.cmd_code = MAV_CMD_INIT;
+            joy_srv.request.cmd_code = MAV_CMD_FINISH;
             airborne_srv.call(cmd_srv);
+            joyCtrl_srv.call(joy_srv);
+            gui_state_pub_.publish(gui_state_msg);
+        }
+
+        void airborneJoy(){
+            gui_state_msg.data = "AIRBORNE_JOY";
+            decomp_ros_msgs::cmd marker_srv;
+            decomp_ros_msgs::cmd joy_srv;
+            marker_srv.request.cmd_code = MAV_CMD_FINISH;
+            joy_srv.request.cmd_code = MAV_CMD_INIT;
+            airborne_srv.call(marker_srv);
+            joyCtrl_srv.call(joy_srv);
+            gui_state_pub_.publish(gui_state_msg);
         }
 
         void airborneFinished(){
@@ -219,6 +235,7 @@ namespace rviz_visual_tools
             cmd.data = FINISH;
             flight_cmd_pub.publish(cmd);
             airborne_srv.call(cmd_srv);
+            joyCtrl_srv.call(cmd_srv);
         }
 
         void back2main(){

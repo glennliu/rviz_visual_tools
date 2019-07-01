@@ -104,7 +104,8 @@ namespace rviz_visual_tools
         void moveRepeatReset();
 
         void moveAirborneTakeoff();
-        void moveAirborneInit();
+        void moveAirborneMarker();
+        void moveAirborneJoy();
         void moveAirborneFinish();
 
         void disableMainMenu();
@@ -140,7 +141,8 @@ namespace rviz_visual_tools
         QPushButton* btn_repeat_reset;
 
         QPushButton* btn_airborne_takeoff;
-        QPushButton* btn_airborne_init;
+        QPushButton* btn_airborne_marker;
+        QPushButton* btn_airborne_joy;
         QPushButton* btn_airborn_finished;
 
 //  ros::Subscriber repeat_init_check;

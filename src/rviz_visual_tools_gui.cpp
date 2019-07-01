@@ -223,9 +223,13 @@ namespace rviz_visual_tools {
         btn_airborne_takeoff->setText("Takeoff");
         connect(btn_airborne_takeoff, SIGNAL(clicked()), this, SLOT(moveAirborneTakeoff()));
 
-        btn_airborne_init = new QPushButton(this);
-        btn_airborne_init->setText("Init");
-        connect(btn_airborne_init, SIGNAL(clicked()), this, SLOT(moveAirborneInit()));
+        btn_airborne_marker = new QPushButton(this);
+        btn_airborne_marker->setText("Marker");
+        connect(btn_airborne_marker, SIGNAL(clicked()), this, SLOT(moveAirborneMarker()));
+
+        btn_airborne_joy = new QPushButton(this);
+        btn_airborne_joy->setText("Joy");
+        connect(btn_airborne_joy, SIGNAL(clicked()), this, SLOT(moveAirborneJoy()));
 
         btn_airborn_finished = new QPushButton(this);
         btn_airborn_finished->setText("Finish");
@@ -237,13 +241,15 @@ namespace rviz_visual_tools {
 
         airborneLayout = new QHBoxLayout;
         airborneLayout->addWidget(btn_airborne_takeoff);
-        airborneLayout->addWidget(btn_airborne_init);
+        airborneLayout->addWidget(btn_airborne_marker);
+        airborneLayout->addWidget(btn_airborne_joy);
         airborneLayout->addWidget(btn_airborn_finished);
         airborneLayout->addWidget(btn_back2main);
         mainLayout->addLayout(airborneLayout);
         setLayout(mainLayout);
         btn_airborne_takeoff->setEnabled(true);
-        btn_airborne_init->setDisabled(true);
+        btn_airborne_marker->setDisabled(true);
+        btn_airborne_joy->setDisabled(true);
         btn_airborn_finished->setDisabled(true);
         btn_back2main->setEnabled(true);
 
@@ -325,9 +331,11 @@ namespace rviz_visual_tools {
             delete(btn_map_finish);
             delete(mapLayout);
         }
-        else if(gui_state_.data == "AIRBORNE"){
+        else if(gui_state_.data == "AIRBORNE" ||gui_state_.data == "AIRBORNE_MARKER"
+                       || gui_state_.data == "AIRBORNE_JOY"){
             delete(btn_airborne_takeoff);
-            delete(btn_airborne_init);
+            delete(btn_airborne_marker);
+            delete(btn_airborne_joy);
             delete(btn_airborn_finished);
             delete(airborneLayout);
         }
@@ -362,19 +370,29 @@ namespace rviz_visual_tools {
     void RvizVisualToolsGui::moveAirborneTakeoff(){
         remote_receiver.airborneTakeoff();
         btn_airborne_takeoff->setDisabled(true);
-        btn_airborne_init->setEnabled(true);
+        btn_airborne_marker->setEnabled(true);
+        btn_airborne_joy->setEnabled(true);
         btn_airborn_finished->setEnabled(true);
     }
 
-        void RvizVisualToolsGui::moveAirborneInit() {
-        remote_receiver.airborneInit();
-        btn_airborne_init->setDisabled(true);
+    void RvizVisualToolsGui::moveAirborneMarker() {
+        remote_receiver.airborneMarker();
+        btn_airborne_marker->setDisabled(true);
+        btn_airborne_joy->setEnabled(true);
         btn_airborn_finished->setEnabled(true);
     }
+
+    void RvizVisualToolsGui::moveAirborneJoy() {
+        remote_receiver.airborneJoy();
+        btn_airborne_marker->setEnabled(true);
+        btn_airborne_joy->setDisabled(true);
+        btn_airborn_finished->setEnabled(true);
+    }
+
 
     void RvizVisualToolsGui::moveAirborneFinish() {
         remote_receiver.airborneFinished();
-//        btn_airborne_init->setEnabled(true);
+//        btn_airborne_marker->setEnabled(true);
         btn_airborn_finished->setDisabled(true);
 
     }
