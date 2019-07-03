@@ -35,7 +35,8 @@
 
 #define REPEAT_BEGIN        21 
 #define MAP_BEGIN           22      // [GUI] get from GUI, then takeoff and hover
-
+#define WAYPOINT_MAPPING    23      // [GUI] get from GUI, then go to waypoint mapping mode
+#define JOYSTICK_MAPPING    24      // [GUI] get from GUI. then go to Joystick mapping mode
 #define CTRL_CMD_MODE       31      // n1ctrl get in to CMD_CTRL state, double hand shake: demo_main.cpp <----> n1ctrl
 
 #define FINISH              99      // [GUI] get from gui, then it will landing

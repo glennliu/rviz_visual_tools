@@ -371,7 +371,7 @@ namespace rviz_visual_tools {
         remote_receiver.airborneTakeoff();
         btn_airborne_takeoff->setDisabled(true);
         btn_airborne_marker->setEnabled(true);
-        btn_airborne_joy->setEnabled(true);
+        btn_airborne_joy->setDisabled(true);
         btn_airborn_finished->setEnabled(true);
     }
 
