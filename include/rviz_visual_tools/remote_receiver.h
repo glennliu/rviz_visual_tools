@@ -64,7 +64,7 @@ namespace rviz_visual_tools
             gui_state_pub_ = nh_.advertise<std_msgs::String>("/gui_state", 1);
             traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
             flight_cmd_pub = nh_.advertise<std_msgs::Int16>("/flight_cmd",1);
-            save_posegraph_pub = nh_.advertise<std_msgs::Int16>("/save_pg_cmd",1);
+            save_posegraph_pub = nh_.advertise<std_msgs::Int16>("/demo/save_pg_cmd",1);
             //            drone_state_sub = nh_.subscribe("/demo/state",1,drone_state_cb);
 
             joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
