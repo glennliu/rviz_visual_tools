@@ -39,6 +39,7 @@
 #define JOYSTICK_MAPPING    24      // [GUI] get from GUI. then go to Joystick mapping mode
 #define CTRL_CMD_MODE       31      // n1ctrl get in to CMD_CTRL state, double hand shake: demo_main.cpp <----> n1ctrl
 
+#define SAVE_POSE_GRAPH     98      // send to pose_graph_node, then it will save pose graph
 #define FINISH              99      // [GUI] get from gui, then it will landing
 /*
 MAPPING: 

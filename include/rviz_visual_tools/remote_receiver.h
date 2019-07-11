@@ -64,7 +64,8 @@ namespace rviz_visual_tools
             gui_state_pub_ = nh_.advertise<std_msgs::String>("/gui_state", 1);
             traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
             flight_cmd_pub = nh_.advertise<std_msgs::Int16>("/flight_cmd",1);
-//            drone_state_sub = nh_.subscribe("/demo/state",1,drone_state_cb);
+            save_posegraph_pub = nh_.advertise<std_msgs::Int16>("/save_pg_cmd",1);
+            //            drone_state_sub = nh_.subscribe("/demo/state",1,drone_state_cb);
 
             joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
             teach_node_cmd = nh_.serviceClient<decomp_ros_msgs::cmd>("/teach_cmd");
@@ -100,7 +101,7 @@ namespace rviz_visual_tools
             map_cmd.request.data = true;
             map_server_srv.call(map_cmd);
             decomp_ros_msgs::cmd surf_cmd;
-            surf_cmd.request.cmd_code = 1;
+            surf_cmd.request.cmd_code = MAV_CMD_RUN;
             surf_fusion_srv.call(surf_cmd);
 
         }
@@ -110,12 +111,14 @@ namespace rviz_visual_tools
             gui_state_pub_.publish(gui_state_msg);
 
             std_srvs::SetBool map_cmd;
+            std_msgs::Int16 save_pose_msg;
             map_cmd.request.data = true;
             map_server_save_srv.call(map_cmd);
             decomp_ros_msgs::cmd surf_cmd;
-            surf_cmd.request.cmd_code = 2;
+            surf_cmd.request.cmd_code = MAV_CMD_FINISH;
             surf_fusion_srv.call(surf_cmd);
-
+            save_pose_msg.data = SAVE_POSE_GRAPH;
+            save_posegraph_pub.publish(save_pose_msg);
         }
 
         void EnterTeach(){
@@ -202,13 +205,21 @@ namespace rviz_visual_tools
             gui_state_msg.data = "AIRBORNE";
             gui_state_pub_.publish(gui_state_msg);
 
-
             std_srvs::SetBool map_cmd;
             map_cmd.request.data = true;
             map_server_srv.call(map_cmd);
             decomp_ros_msgs::cmd surf_cmd;
             surf_cmd.request.cmd_code = MAV_CMD_RUN;
             surf_fusion_srv.call(surf_cmd);
+
+            /*
+            std_srvs::SetBool map_cmd;
+            map_cmd.request.data = true;
+            map_server_srv.call(map_cmd);
+            decomp_ros_msgs::cmd surf_cmd;
+            surf_cmd.request.cmd_code = MAV_CMD_RUN;
+            surf_fusion_srv.call(surf_cmd);
+            */
         }
 
         void airborneTakeoff(){
@@ -334,7 +345,8 @@ namespace rviz_visual_tools
         // The ROS publishers
         ros::Publisher joy_publisher_;
         ros::Publisher gui_state_pub_;
-        ros::Publisher traj_start_trigger, flight_cmd_pub;
+        ros::Publisher traj_start_trigger, flight_cmd_pub,
+                save_posegraph_pub;
 
         // the ROS subscriber
         ros::Subscriber repeat_init_switch,drone_state_sub;

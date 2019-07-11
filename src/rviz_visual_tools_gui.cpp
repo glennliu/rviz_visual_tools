@@ -58,9 +58,9 @@ namespace rviz_visual_tools {
     RvizVisualToolsGui::RvizVisualToolsGui(QWidget *parent) : rviz::Panel(parent) {
         //*********** Init Buttons *************//
         // Create a push button
-//        btn_mapping = new QPushButton(this);
-//        btn_mapping->setText("Mapping");
-//        connect(btn_mapping, SIGNAL(clicked()), this, SLOT(moveMapping()));
+        btn_mapping = new QPushButton(this);
+        btn_mapping->setText("HandheldM");
+        connect(btn_mapping, SIGNAL(clicked()), this, SLOT(moveMapping()));
 
         // Create a push button
         btn_teach = new QPushButton(this);
@@ -74,12 +74,12 @@ namespace rviz_visual_tools {
 
         // Create a push button
         btn_airborne = new QPushButton(this);
-        btn_airborne->setText("Airborne");
+        btn_airborne->setText("AirborneM");
         connect(btn_airborne, SIGNAL(clicked()), this, SLOT(moveAirborne()));
 
         // Horizontal Layout1: Menu
         menuLayout = new QHBoxLayout;
-//        menuLayout->addWidget(btn_mapping);
+        menuLayout->addWidget(btn_mapping);
         menuLayout->addWidget(btn_teach);
         menuLayout->addWidget(btn_repeat);
         menuLayout->addWidget(btn_airborne);
@@ -90,7 +90,7 @@ namespace rviz_visual_tools {
         mainLayout->addLayout(menuLayout);
         setLayout(mainLayout);
 
-//        btn_mapping->setEnabled(true);
+        btn_mapping->setEnabled(true);
         btn_teach->setEnabled(true);
         btn_repeat->setEnabled(true);
         btn_airborne->setEnabled(true);
@@ -166,8 +166,6 @@ namespace rviz_visual_tools {
         btn_teach_reset->setDisabled(true);
         btn_back2main->setEnabled(true);
     }
-
-
 
     void RvizVisualToolsGui::moveRepeat() {
         remote_receiver.EnterRepeat();
