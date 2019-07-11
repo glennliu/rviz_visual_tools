@@ -58,15 +58,14 @@ namespace rviz_visual_tools {
     RvizVisualToolsGui::RvizVisualToolsGui(QWidget *parent) : rviz::Panel(parent) {
         //*********** Init Buttons *************//
         // Create a push button
-        btn_mapping = new QPushButton(this);
-        btn_mapping->setText("Mapping");
-        connect(btn_mapping, SIGNAL(clicked()), this, SLOT(moveMapping()));
+//        btn_mapping = new QPushButton(this);
+//        btn_mapping->setText("Mapping");
+//        connect(btn_mapping, SIGNAL(clicked()), this, SLOT(moveMapping()));
 
         // Create a push button
         btn_teach = new QPushButton(this);
         btn_teach->setText("Teach");
         connect(btn_teach, SIGNAL(clicked()), this, SLOT(moveTeach()));
-
 
         // Create a push button
         btn_repeat = new QPushButton(this);
@@ -80,7 +79,7 @@ namespace rviz_visual_tools {
 
         // Horizontal Layout1: Menu
         menuLayout = new QHBoxLayout;
-        menuLayout->addWidget(btn_mapping);
+//        menuLayout->addWidget(btn_mapping);
         menuLayout->addWidget(btn_teach);
         menuLayout->addWidget(btn_repeat);
         menuLayout->addWidget(btn_airborne);
@@ -91,7 +90,7 @@ namespace rviz_visual_tools {
         mainLayout->addLayout(menuLayout);
         setLayout(mainLayout);
 
-        btn_mapping->setEnabled(true);
+//        btn_mapping->setEnabled(true);
         btn_teach->setEnabled(true);
         btn_repeat->setEnabled(true);
         btn_airborne->setEnabled(true);
@@ -132,7 +131,7 @@ namespace rviz_visual_tools {
         remote_receiver.EnterTeach();
 
         //
-        btn_mapping->setDisabled(true);
+//        btn_mapping->setDisabled(true);
         btn_repeat->setDisabled(true);
 
         btn_teach_joyinit = new QPushButton(this);
@@ -172,7 +171,7 @@ namespace rviz_visual_tools {
 
     void RvizVisualToolsGui::moveRepeat() {
         remote_receiver.EnterRepeat();
-        btn_mapping->setDisabled(true);
+//        btn_mapping->setDisabled(true);
         btn_teach->setDisabled(true);
 
         btn_repeat_load = new QPushButton(this);
@@ -215,7 +214,7 @@ namespace rviz_visual_tools {
     void RvizVisualToolsGui::moveAirborne() {
         remote_receiver.EnterAirborne();
 
-        btn_mapping->setDisabled(true);
+//        btn_mapping->setDisabled(true);
         btn_teach->setDisabled(true);
         btn_repeat->setDisabled(true);
 
@@ -273,6 +272,7 @@ namespace rviz_visual_tools {
         btn_back2main->setDisabled(true);
         btn_repeat_load->setDisabled(true);
         btn_repeat_reset->setEnabled(true);
+        btn_repeat_go->setEnabled(true);
     }
 
     void RvizVisualToolsGui::moveRepeatGo() {
@@ -286,6 +286,7 @@ namespace rviz_visual_tools {
     void RvizVisualToolsGui::moveRepeatLand(){
         btn_back2main->setEnabled(true);
         btn_repeat_go->setEnabled(true);
+        btn_repeat_reset->setEnabled(true);
         btn_repeat_land->setDisabled(true);
         remote_receiver.RepeatLand();
     }
@@ -300,7 +301,7 @@ namespace rviz_visual_tools {
 
     void RvizVisualToolsGui::moveMain() {
 
-        btn_mapping->setEnabled(true);
+//        btn_mapping->setEnabled(true);
         btn_teach->setEnabled(true);
         btn_repeat->setEnabled(true);
 

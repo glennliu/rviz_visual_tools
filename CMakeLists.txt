@@ -71,6 +71,7 @@ catkin_package(
     ${PROJECT_NAME}_remote_control
     ${PROJECT_NAME}_imarker_simple
     ${PROJECT_NAME}_map
+#    teach_widget
 #    ${PROJECT_NAME}_remote_receiver
   CATKIN_DEPENDS
     eigen_conversions
@@ -102,11 +103,17 @@ include_directories(SYSTEM include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS}
 set(SOURCE_FILES
   src/${PROJECT_NAME}_gui.cpp
   src/key_tool.cpp
+#  src/teach_widget.cpp
 )
 
 # Rviz GUI library
 add_library(${PROJECT_NAME}_gui ${SOURCE_FILES} src/remote_control.cpp)
 target_link_libraries(${PROJECT_NAME}_gui ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+#add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
+
+# Rviz Teach Panel
+#add_library(teach_widget src/teach_widget.cpp)
+#target_link_libraries(teach_widget ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 #add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
 
 # Mapping Panel Library
@@ -198,6 +205,7 @@ install(
     ${PROJECT_NAME}_imarker_simple
     ${PROJECT_NAME}_remote_control
     ${PROJECT_NAME}_map
+#    teach_widget
 #    ${PROJECT_NAME}_remote_receiver
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}

@@ -177,7 +177,10 @@ namespace rviz_visual_tools
             gui_state_pub_.publish(gui_state_msg);
 
             geometry_msgs::PoseStamped pose_msg;
+            std_msgs::Int16 flight_cmd_msg;
             pose_msg.header.stamp = ros::Time::now();
+            flight_cmd_msg.data = REPEAT_BEGIN;
+            flight_cmd_pub.publish(flight_cmd_msg);
             traj_start_trigger.publish(pose_msg);
         }
 
@@ -198,6 +201,14 @@ namespace rviz_visual_tools
         void EnterAirborne(){
             gui_state_msg.data = "AIRBORNE";
             gui_state_pub_.publish(gui_state_msg);
+
+
+            std_srvs::SetBool map_cmd;
+            map_cmd.request.data = true;
+            map_server_srv.call(map_cmd);
+            decomp_ros_msgs::cmd surf_cmd;
+            surf_cmd.request.cmd_code = MAV_CMD_RUN;
+            surf_fusion_srv.call(surf_cmd);
         }
 
         void airborneTakeoff(){
@@ -242,6 +253,13 @@ namespace rviz_visual_tools
             flight_cmd_pub.publish(cmd);
             airborne_srv.call(cmd_srv);
             joyCtrl_srv.call(cmd_srv);
+
+            std_srvs::SetBool map_cmd;
+            map_cmd.request.data = true;
+            map_server_save_srv.call(map_cmd);
+            decomp_ros_msgs::cmd surf_cmd;
+            surf_cmd.request.cmd_code = MAV_CMD_FINISH;
+            surf_fusion_srv.call(surf_cmd);
         }
 
         void back2main(){
