@@ -24,11 +24,11 @@
 
 namespace rviz_visual_tools
 {
-    class TeachWidget : public rviz::Panel
+    class RvizVisualToolsTeach : public rviz::Panel
     {
-        Q_OBJECT
+    Q_OBJECT
     public:
-        explicit TeachWidget(QWidget* parent = 0);
+        explicit RvizVisualToolsTeach(QWidget* parent = 0);
 
     public Q_SLOTS:
 
@@ -36,14 +36,16 @@ namespace rviz_visual_tools
         void moveTeachJoyInit();
         void moveTeachJoyFinish();
         void moveTeachJoyReset();
+        void moveGoback();
 
-        protected:
+    protected:
         QHBoxLayout* menuLayout;
         QVBoxLayout* mainLayout;
 
         QPushButton* btn_teach_joyinit;
         QPushButton* btn_teach_joyfinish;
         QPushButton* btn_teach_reset;
+        QPushButton* btn_goback;
 
         RemoteReciever remote_receiver;
     };

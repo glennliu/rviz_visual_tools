@@ -1,7 +1,7 @@
 <library path="lib/librviz_visual_tools_map">
 
 
-  <class name="rviz_visual_tools/Mapping"
+  <class name="rviz_visual_tools/RvizVisualToolsMap"
          type="rviz_visual_tools::RvizVisualToolsMap"
          base_class_type="rviz::Panel">
     <description>

@@ -71,7 +71,8 @@ catkin_package(
     ${PROJECT_NAME}_remote_control
     ${PROJECT_NAME}_imarker_simple
     ${PROJECT_NAME}_map
-#    teach_widget
+    ${PROJECT_NAME}_teach
+    ${PROJECT_NAME}_repeat
 #    ${PROJECT_NAME}_remote_receiver
   CATKIN_DEPENDS
     eigen_conversions
@@ -96,10 +97,6 @@ include_directories(SYSTEM include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS}
 ###########
 
 
-
-
-
-
 set(SOURCE_FILES
   src/${PROJECT_NAME}_gui.cpp
   src/key_tool.cpp
@@ -111,14 +108,20 @@ add_library(${PROJECT_NAME}_gui ${SOURCE_FILES} src/remote_control.cpp)
 target_link_libraries(${PROJECT_NAME}_gui ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 #add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
 
+# Rviz Mapping Panel
+add_library(${PROJECT_NAME}_map src/rviz_visual_tools_map.cpp)
+target_link_libraries(${PROJECT_NAME}_map ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+
 # Rviz Teach Panel
-#add_library(teach_widget src/teach_widget.cpp)
-#target_link_libraries(teach_widget ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME}_teach src/rviz_visual_tools_teach.cpp)
+target_link_libraries(${PROJECT_NAME}_teach ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 #add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
 
-# Mapping Panel Library
-add_library(${PROJECT_NAME}_map src/rviz_visual_tools_map.cpp src/key_tool.cpp src/remote_control.cpp)
-target_link_libraries(${PROJECT_NAME}_map ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+# Rviz Repeat Panel
+add_library(${PROJECT_NAME}_repeat src/rviz_visual_tools_repeat.cpp)
+target_link_libraries(${PROJECT_NAME}_repeat ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+#add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
+
 
 # Remote control library
 add_library(${PROJECT_NAME}_remote_control src/remote_control.cpp)
@@ -205,7 +208,8 @@ install(
     ${PROJECT_NAME}_imarker_simple
     ${PROJECT_NAME}_remote_control
     ${PROJECT_NAME}_map
-#    teach_widget
+    ${PROJECT_NAME}_teach
+    ${PROJECT_NAME}_repeat
 #    ${PROJECT_NAME}_remote_receiver
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}

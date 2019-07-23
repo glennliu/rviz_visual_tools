@@ -6,21 +6,34 @@
       A panel widget allowing control of a ROS pipeline
     </description>
   </class>
-
-  <!--<class name="rviz_visual_tools/Mapping"-->
-         <!--type="rviz_visual_tools::RvizVisualToolsMap"-->
-         <!--base_class_type="rviz::Panel">-->
-    <!--<description>-->
-      <!--A panel widget on Mapping-->
-    <!--</description>-->
-  <!--</class>-->
-
-  <!--<class name="rviz_visual_tools/KeyTool" type="rviz_visual_tools::KeyTool" base_class_type="rviz::Tool">-->
-    <!--<description>-->
-      <!--Tool to capture keyboard input-->
-    <!--</description>-->
-  <!--</class>-->
-
 </library>
 
+<library path="lib/librviz_visual_tools_map">
+<class name="rviz_visual_tools/RvizVisualToolsMap"
+       type="rviz_visual_tools::RvizVisualToolsMap"
+       base_class_type="rviz::Panel">
+  <description>
+    A panel widget on Mapping
+  </description>
+</class>
+</library>
 
+<library path="lib/librviz_visual_tools_teach">
+<class name="rviz_visual_tools/RvizVisualToolsTeach"
+       type="rviz_visual_tools::RvizVisualToolsTeach"
+       base_class_type="rviz::Panel">
+  <description>
+    A panel widget on Teaching
+  </description>
+</class>
+</library>
+
+<library path="lib/librviz_visual_tools_repeat">
+<class name="rviz_visual_tools/RvizVisualToolsRepeat"
+       type="rviz_visual_tools::RvizVisualToolsRepeat"
+       base_class_type="rviz::Panel">
+  <description>
+    A panel widget on Repeat
+  </description>
+</class>
+</library>

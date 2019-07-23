@@ -98,7 +98,7 @@ namespace rviz_visual_tools {
     }
 
     void RvizVisualToolsGui::moveMapping() {
-        remote_receiver.EnterMap();
+        remote_receiver.enterMap();
 
         btn_teach->setDisabled(true);
         btn_repeat->setDisabled(true);

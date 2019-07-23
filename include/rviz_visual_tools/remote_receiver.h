@@ -62,6 +62,8 @@ namespace rviz_visual_tools
 
             joy_publisher_ = nh_.advertise<sensor_msgs::Joy>("/rviz_visual_tools_gui", 1);
             gui_state_pub_ = nh_.advertise<std_msgs::String>("/gui_state", 1);
+            gui_code_pub_ = nh_.advertise<std_msgs::Int16>("/gui_code",1);
+
             traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
             flight_cmd_pub = nh_.advertise<std_msgs::Int16>("/flight_cmd",1);
             save_posegraph_pub = nh_.advertise<std_msgs::Int16>("/demo/save_pg_cmd",1);
@@ -83,19 +85,37 @@ namespace rviz_visual_tools
 //            repeat_init_switch = nh_.subscribe("/repeat_go_precheck",1,repeat_init_check_callback);
 
 
-            gui_state_msg.data = "MAIN_MENU";
-            gui_state_pub_.publish(gui_state_msg);
+            gui_code_msg.data = GUI_MAIN;
+            gui_code_pub_.publish(gui_code_msg);
+
+//            gui_state_msg.data = "MAIN_MENU";
+//            gui_state_pub_.publish(gui_state_msg);
 
         }
 
-        void EnterMap(){
-            gui_state_msg.data = "MAP_INIT";
-            gui_state_pub_.publish(gui_state_msg);
+        void enterMap(){
+//            gui_state_msg.data = "MAP_INIT";
+//            gui_state_pub_.publish(gui_state_msg);
+
+            gui_code_msg.data = GUI_MAP_MAIN;
+            gui_code_pub_.publish(gui_code_msg);
+        }
+
+        void enterAirborne(){
+            gui_code_msg.data = GUI_MAP_AIRBORNE;
+            gui_code_pub_.publish(gui_code_msg);
+        }
+
+        void enterHandheld(){
+            gui_code_msg.data = GUI_MAP_HANDHELD;
+            gui_code_pub_.publish(gui_code_msg);
         }
 
         void MapBuilding(){
-            gui_state_msg.data = "MAP_BUILDING";
-            gui_state_pub_.publish(gui_state_msg);
+//            gui_state_msg.data = "MAP_BUILDING";
+//            gui_state_pub_.publish(gui_state_msg);
+//            gui_code_msg.data = GUI_MAP_HANDHELD;
+//            gui_code_pub_.publish(gui_code_msg);
 
             std_srvs::SetBool map_cmd;
             map_cmd.request.data = true;
@@ -107,8 +127,10 @@ namespace rviz_visual_tools
         }
 
         void MapFinished(){
-            gui_state_msg.data = "MAP_FINISHED";
-            gui_state_pub_.publish(gui_state_msg);
+//            gui_state_msg.data = "MAP_FINISHED";
+//            gui_state_pub_.publish(gui_state_msg);
+//            gui_code_msg.data = GUI_HANDHELD_FINISHED;
+//            gui_code_pub_.publish(gui_code_msg);
 
             std_srvs::SetBool map_cmd;
             std_msgs::Int16 save_pose_msg;
@@ -124,11 +146,16 @@ namespace rviz_visual_tools
         void EnterTeach(){
             gui_state_msg.data = "TEACH_INIT";
             gui_state_pub_.publish(gui_state_msg);
+
+            gui_code_msg.data = GUI_TEACH;
+            gui_code_pub_.publish(gui_code_msg);
         }
 
         void EnterRepeat(){
             gui_state_msg.data = "REPEAT_INIT";
             gui_state_pub_.publish(gui_state_msg);
+            gui_code_msg.data = GUI_REPEAT;
+            gui_code_pub_.publish(gui_code_msg);
         }
 
         void TeachLoadPath(){
@@ -326,6 +353,10 @@ namespace rviz_visual_tools
             return gui_state_msg;
         }
 
+        std_msgs::Int16 check_gui_code(){
+            return gui_code_msg;
+        }
+
 //        std_msgs::Int16 check_repeat_flag(){
 //            return repeat_flag_msg;
 //        }
@@ -344,7 +375,7 @@ namespace rviz_visual_tools
     protected:
         // The ROS publishers
         ros::Publisher joy_publisher_;
-        ros::Publisher gui_state_pub_;
+        ros::Publisher gui_state_pub_,gui_code_pub_;
         ros::Publisher traj_start_trigger, flight_cmd_pub,
                 save_posegraph_pub;
 
@@ -363,6 +394,7 @@ namespace rviz_visual_tools
 
         //
         std_msgs::String gui_state_msg;
+        std_msgs::Int16 gui_code_msg;
         int16_t repeat_check_flag;
         int16_t drone_state;
 
