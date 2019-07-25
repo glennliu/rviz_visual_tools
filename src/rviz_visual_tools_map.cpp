@@ -125,6 +125,7 @@ namespace rviz_visual_tools
         mainLayout->addLayout(airborneLayout);
         setLayout(mainLayout);
 
+        btn_handheld->setDisabled(true);
         btn_airborne_takeoff->setEnabled(true);
         btn_airborne_marker->setDisabled(true);
         btn_airborne_joy->setDisabled(true);
