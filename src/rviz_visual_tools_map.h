@@ -50,6 +50,8 @@ namespace rviz_visual_tools
 
             void goback();
 
+            void invalid_button();
+
         protected:
             QVBoxLayout* mainLayout;
             QHBoxLayout* handheldLayout;

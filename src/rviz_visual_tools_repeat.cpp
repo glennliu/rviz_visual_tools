@@ -26,6 +26,10 @@ namespace rviz_visual_tools
     {
         remote_receiver.EnterRepeat();
 
+        const std::size_t button_size = 10;
+        sub_state_monitor= nh_.subscribe<std_msgs::Int16>("/demo/state", button_size,
+                &RvizVisualToolsRepeat::stateCallback, this);
+
         btn_load = new QPushButton(this);
         btn_load->setText("LoadPath");
         connect(btn_load,SIGNAL(clicked()),this,SLOT(moveLoad()));
@@ -60,11 +64,26 @@ namespace rviz_visual_tools
         btn_reset->setDisabled(true);
     }
 
+    void RvizVisualToolsRepeat::stateCallback(const std_msgs::Int16::ConstPtr &msg) {
+//        ROS_INFO("haha");
+        flight_state_value = msg->data;
+        switch (flight_state_value){
+            case 2:
+                btn_takeoff->setEnabled(true);
+                break;
+        }
+    }
+
+
     void RvizVisualToolsRepeat::moveLoad() {
+        int32_t tmp_int;
+
         remote_receiver.TeachLoadPath();
+//        tmp_int= remote_control().get_button_value();
+//        ROS_INFO("BUTTON value: %d",tmp_int);
 
         btn_load->setDisabled(true);
-        btn_takeoff->setEnabled(true);
+//        btn_takeoff->setEnabled(true);
         btn_land->setDisabled(true);
         btn_reset->setEnabled(true);
     }

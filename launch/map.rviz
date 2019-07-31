@@ -31,7 +31,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: DenseMap
   - Class: rviz/Displays
     Help Height: 78
     Name: Displays
@@ -457,8 +457,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 2.75948477
-        Min Value: -0.369108707
+        Max Value: -9999
+        Min Value: 9999
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -759,7 +759,7 @@ Visualization Manager:
       Marker Topic: /vins_estimator/camera_pose_visual
       Name: MarkerArray
       Namespaces:
-        {}
+        CameraPoseVisualization: true
       Queue Size: 100
       Value: true
   Enabled: true
@@ -780,7 +780,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 10
+      Distance: 8.40249729
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -795,10 +795,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.78039819
+      Pitch: 0.470398545
       Target Frame: drone
       Value: XYOrbit (rviz)
-      Yaw: 0.78039819
+      Yaw: 3.23540354
     Saved:
       - Class: rviz/ThirdPersonFollower
         Distance: 4.04827738

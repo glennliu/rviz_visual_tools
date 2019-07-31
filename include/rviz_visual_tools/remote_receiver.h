@@ -67,7 +67,7 @@ namespace rviz_visual_tools
             traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
             flight_cmd_pub = nh_.advertise<std_msgs::Int16>("/flight_cmd",1);
             save_posegraph_pub = nh_.advertise<std_msgs::Int16>("/demo/save_pg_cmd",1);
-            //            drone_state_sub = nh_.subscribe("/demo/state",1,drone_state_cb);
+            drone_state_sub = nh_.subscribe("/demo/state",1,drone_state_cb);
 
             joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
             teach_node_cmd = nh_.serviceClient<decomp_ros_msgs::cmd>("/teach_cmd");
@@ -101,10 +101,12 @@ namespace rviz_visual_tools
             gui_code_pub_.publish(gui_code_msg);
         }
 
+/*
         void enterAirborne(){
             gui_code_msg.data = GUI_MAP_AIRBORNE;
             gui_code_pub_.publish(gui_code_msg);
         }
+        */
 
         void enterHandheld(){
             gui_code_msg.data = GUI_MAP_HANDHELD;
@@ -156,6 +158,11 @@ namespace rviz_visual_tools
             gui_state_pub_.publish(gui_state_msg);
             gui_code_msg.data = GUI_REPEAT;
             gui_code_pub_.publish(gui_code_msg);
+
+            decomp_ros_msgs::cmd joy_cmd;
+            joy_cmd.request.cmd_code = MAV_CMD_INIT;
+            joyCtrl_srv.call(joy_cmd);
+
         }
 
         void TeachLoadPath(){
@@ -232,12 +239,14 @@ namespace rviz_visual_tools
             gui_state_msg.data = "AIRBORNE";
             gui_state_pub_.publish(gui_state_msg);
 
+/*
             std_srvs::SetBool map_cmd;
             map_cmd.request.data = true;
             map_server_srv.call(map_cmd);
             decomp_ros_msgs::cmd surf_cmd;
             surf_cmd.request.cmd_code = MAV_CMD_RUN;
             surf_fusion_srv.call(surf_cmd);
+            */
 
             /*
             std_srvs::SetBool map_cmd;
@@ -292,12 +301,15 @@ namespace rviz_visual_tools
             airborne_srv.call(cmd_srv);
             joyCtrl_srv.call(cmd_srv);
 
+
+/*
             std_srvs::SetBool map_cmd;
             map_cmd.request.data = true;
             map_server_save_srv.call(map_cmd);
             decomp_ros_msgs::cmd surf_cmd;
             surf_cmd.request.cmd_code = MAV_CMD_FINISH;
             surf_fusion_srv.call(surf_cmd);
+            */
         }
 
         void back2main(){
@@ -361,9 +373,9 @@ namespace rviz_visual_tools
 //            return repeat_flag_msg;
 //        }
 
-//        static void drone_state_cb(const std_msgs::Int16 &msg){
+        static void drone_state_cb(const std_msgs::Int16 &msg){
 //            drone_state = msg.data;
-//        }
+        }
 
         static void repeat_init_check_callback(const std_msgs::Int16 &msg){
             std_msgs::Int16 repeat_flag_msg;

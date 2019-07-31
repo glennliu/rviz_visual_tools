@@ -19,6 +19,7 @@
 #include <QComboBox>
 
 #include "../include/rviz_visual_tools/remote_receiver.h"
+#include <rviz_visual_tools/remote_control.h>
 //#include <rviz_visual_tools/teach_cmd.h>
 //#include <rviz_visual_tools/teach_cmd.h>
 
@@ -32,6 +33,8 @@ namespace rviz_visual_tools
     public:
         explicit RvizVisualToolsRepeat(QWidget* parent = 0);
 
+        void stateCallback(const std_msgs::Int16::ConstPtr &msg);
+
     public Q_SLOTS:
 
     protected Q_SLOTS:
@@ -39,6 +42,13 @@ namespace rviz_visual_tools
         void moveTakeoff();
         void moveLand();
         void reset();
+
+    private:
+        ros::NodeHandle nh_;
+
+        ros::Subscriber sub_state_monitor;
+
+        int16_t flight_state_value;
 
     protected:
         QHBoxLayout* menuLayout;

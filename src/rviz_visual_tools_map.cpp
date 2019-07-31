@@ -93,7 +93,8 @@ namespace rviz_visual_tools
 
 /////////////////////////// Airborne ////////////////////////////////
     void RvizVisualToolsMap::enterAirborne(){
-        remote_reciever_.enterAirborne();
+        remote_reciever_.EnterAirborne();
+        remote_reciever_.MapBuilding();
 
         btn_airborne_takeoff = new QPushButton(this);
         btn_airborne_takeoff->setText("Takeoff");
@@ -158,6 +159,7 @@ namespace rviz_visual_tools
 
     void RvizVisualToolsMap::airborneLand(){
         remote_reciever_.airborneFinished();
+        remote_reciever_.MapFinished();
         btn_airborne_takeoff->setEnabled(true);
         btn_airborne_marker->setDisabled(true);
         btn_airborne_joy->setDisabled(true);
@@ -190,6 +192,10 @@ namespace rviz_visual_tools
         btn_handheld->setEnabled(true);
         btn_airborne->setEnabled(true);
 
+    }
+
+    void RvizVisualToolsMap::invalid_button(){
+        
     }
 
     // end panel gui

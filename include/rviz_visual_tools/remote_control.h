@@ -112,6 +112,10 @@ public:
     displayWaitingState_ = displayWaitingState;
   }
 
+  int32_t get_button_value(){
+      return button_int;
+  }
+
 private:
   // A shared node handle
   ros::NodeHandle nh_;
@@ -128,6 +132,8 @@ private:
   bool autonomous_ = false;
   bool full_autonomous_ = false;
   bool stop_ = false;
+
+  int32_t button_int =0;
 
   // Callback to visualize waiting state
   DisplayWaitingState displayWaitingState_;

@@ -73,6 +73,7 @@ catkin_package(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
+    ${PROJECT_NAME}_state_monitor
 #    ${PROJECT_NAME}_remote_receiver
   CATKIN_DEPENDS
     eigen_conversions
@@ -126,6 +127,10 @@ target_link_libraries(${PROJECT_NAME}_repeat ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${
 # Remote control library
 add_library(${PROJECT_NAME}_remote_control src/remote_control.cpp)
 target_link_libraries(${PROJECT_NAME}_remote_control ${catkin_LIBRARIES})
+
+# State Monitor Library
+add_library(${PROJECT_NAME}_state_monitor src/state_monitor.cpp)
+target_link_libraries(${PROJECT_NAME}_state_monitor ${catkin_LIBRARIES})
 
 ## Remote Receiver Library
 #add_library(${PROJECT_NAME}_remote_receiver src/remote_receiver.cpp)
@@ -210,6 +215,7 @@ install(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
+    ${PROJECT_NAME}_state_monitor
 #    ${PROJECT_NAME}_remote_receiver
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
