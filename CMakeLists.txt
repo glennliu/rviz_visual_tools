@@ -28,6 +28,7 @@ find_package(catkin REQUIRED COMPONENTS
   trajectory_msgs
   visualization_msgs
   decomp_ros_msgs
+  ground_station_msgs
 #  message_generation
 )
 
@@ -73,8 +74,6 @@ catkin_package(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
-    ${PROJECT_NAME}_state_monitor
-#    ${PROJECT_NAME}_remote_receiver
   CATKIN_DEPENDS
     eigen_conversions
     geometry_msgs
@@ -101,7 +100,6 @@ include_directories(SYSTEM include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS}
 set(SOURCE_FILES
   src/${PROJECT_NAME}_gui.cpp
   src/key_tool.cpp
-#  src/teach_widget.cpp
 )
 
 # Rviz GUI library
@@ -123,18 +121,9 @@ add_library(${PROJECT_NAME}_repeat src/rviz_visual_tools_repeat.cpp)
 target_link_libraries(${PROJECT_NAME}_repeat ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 #add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
 
-
 # Remote control library
 add_library(${PROJECT_NAME}_remote_control src/remote_control.cpp)
 target_link_libraries(${PROJECT_NAME}_remote_control ${catkin_LIBRARIES})
-
-# State Monitor Library
-add_library(${PROJECT_NAME}_state_monitor src/state_monitor.cpp)
-target_link_libraries(${PROJECT_NAME}_state_monitor ${catkin_LIBRARIES})
-
-## Remote Receiver Library
-#add_library(${PROJECT_NAME}_remote_receiver src/remote_receiver.cpp)
-#target_link_libraries(${PROJECT_NAME}_remote_receiver ${catkin_LIBRARIES})
 
 # Visualization Tools Library
 add_library(${PROJECT_NAME}
@@ -215,8 +204,6 @@ install(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
-    ${PROJECT_NAME}_state_monitor
-#    ${PROJECT_NAME}_remote_receiver
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
 )

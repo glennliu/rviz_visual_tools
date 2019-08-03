@@ -48,6 +48,7 @@
 #include <decomp_ros_msgs/cmd.h>
 #include <rviz_visual_tools/mav_cmd_enum.h>
 #include <rviz_visual_tools/statedefine.h>
+#include <ground_station_msgs/Cmd.h>
 
 #include <string.h>
 
@@ -70,17 +71,17 @@ namespace rviz_visual_tools
             drone_state_sub = nh_.subscribe("/demo/state",1,drone_state_cb);
 
             joy_client_ = nh_.serviceClient<std_srvs::SetBool>("/mission_cmd");
-            teach_node_cmd = nh_.serviceClient<decomp_ros_msgs::cmd>("/teach_cmd");
+            teach_node_cmd = nh_.serviceClient<ground_station_msgs::Cmd>("/teach_cmd");
 //            teach_joy_init = nh_.serviceClient<std_srvs::SetBool>("/teach_init");
 //            teach_joy_finish = nh_.serviceClient<std_srvs::SetBool>("/teach_finish");
             teach_load_path = nh_.serviceClient<std_srvs::SetBool>("/teach_load_file");
 //            teach_joy_reset = nh_.serviceClient<std_srvs::SetBool>("/teach_joy_reset");
-            joyCtrl_srv = nh_.serviceClient<decomp_ros_msgs::cmd>("/joyCtrl_cmd");
+            joyCtrl_srv = nh_.serviceClient<ground_station_msgs::Cmd>("/joyCtrl_cmd");
             odom_visual_reset_srv = nh_.serviceClient<std_srvs::SetBool>("/odom_reset");
-            surf_fusion_srv = nh_.serviceClient<decomp_ros_msgs::cmd>("/surf_map_cmd");
+            surf_fusion_srv = nh_.serviceClient<ground_station_msgs::Cmd>("/surf_map_cmd");
             map_server_srv = nh_.serviceClient<std_srvs::SetBool>("/map_server_init");
             map_server_save_srv = nh_.serviceClient<std_srvs::SetBool>("/map_server_save");
-            airborne_srv = nh_.serviceClient<decomp_ros_msgs::cmd>("/airborne_cmd");
+            airborne_srv = nh_.serviceClient<ground_station_msgs::Cmd>("/airborne_cmd");
 
 //            repeat_init_switch = nh_.subscribe("/repeat_go_precheck",1,repeat_init_check_callback);
 
@@ -122,7 +123,7 @@ namespace rviz_visual_tools
             std_srvs::SetBool map_cmd;
             map_cmd.request.data = true;
             map_server_srv.call(map_cmd);
-            decomp_ros_msgs::cmd surf_cmd;
+            ground_station_msgs::Cmd surf_cmd;
             surf_cmd.request.cmd_code = MAV_CMD_RUN;
             surf_fusion_srv.call(surf_cmd);
 
@@ -138,7 +139,7 @@ namespace rviz_visual_tools
             std_msgs::Int16 save_pose_msg;
             map_cmd.request.data = true;
             map_server_save_srv.call(map_cmd);
-            decomp_ros_msgs::cmd surf_cmd;
+            ground_station_msgs::Cmd surf_cmd;
             surf_cmd.request.cmd_code = MAV_CMD_FINISH;
             surf_fusion_srv.call(surf_cmd);
             save_pose_msg.data = SAVE_POSE_GRAPH;
@@ -159,7 +160,7 @@ namespace rviz_visual_tools
             gui_code_msg.data = GUI_REPEAT;
             gui_code_pub_.publish(gui_code_msg);
 
-            decomp_ros_msgs::cmd joy_cmd;
+            ground_station_msgs::Cmd joy_cmd;
             joy_cmd.request.cmd_code = MAV_CMD_INIT;
             joyCtrl_srv.call(joy_cmd);
 
@@ -178,7 +179,7 @@ namespace rviz_visual_tools
             gui_state_msg.data = "TEACH_RUNNING";
             gui_state_pub_.publish(gui_state_msg);
 
-            decomp_ros_msgs::cmd joy_cmd;
+            ground_station_msgs::Cmd joy_cmd;
             joy_cmd.request.cmd_code = MAV_CMD_INIT;
             joyCtrl_srv.call(joy_cmd);
             teach_node_cmd.call(joy_cmd);
@@ -188,7 +189,7 @@ namespace rviz_visual_tools
             gui_state_msg.data = "TEACH_FINISHED";
             gui_state_pub_.publish(gui_state_msg);
 
-            decomp_ros_msgs::cmd joy_cmd;
+            ground_station_msgs::Cmd joy_cmd;
             joy_cmd.request.cmd_code = MAV_CMD_FINISH;
             joyCtrl_srv.call(joy_cmd);
             teach_node_cmd.call(joy_cmd);
@@ -199,7 +200,7 @@ namespace rviz_visual_tools
             gui_state_pub_.publish(gui_state_msg);
 
             std_srvs::SetBool teach_reset_cmd;
-            decomp_ros_msgs::cmd joy_cmd_msg;
+            ground_station_msgs::Cmd joy_cmd_msg;
 
             teach_reset_cmd.request.data = true;
             joy_cmd_msg.request.cmd_code = MAV_CMD_RESET;
@@ -229,15 +230,15 @@ namespace rviz_visual_tools
         void RepeatReset(){
             gui_state_msg.data = "REPEAT_INIT";
             gui_state_pub_.publish(gui_state_msg);
-            decomp_ros_msgs::cmd teach_cmd_msg;
+            ground_station_msgs::Cmd teach_cmd_msg;
 
             teach_cmd_msg.request.cmd_code = MAV_CMD_RESET;
             teach_node_cmd.call(teach_cmd_msg);
         }
 
         void EnterAirborne(){
-            gui_state_msg.data = "AIRBORNE";
-            gui_state_pub_.publish(gui_state_msg);
+            gui_code_msg.data = GUI_MAP_AIRBORNE;
+            gui_code_pub_.publish(gui_code_msg);
 
 /*
             std_srvs::SetBool map_cmd;
@@ -267,33 +268,33 @@ namespace rviz_visual_tools
         void airborneMarker(){
             std_msgs::Int16 cmd;
             cmd.data = WAYPOINT_MAPPING;
-            gui_state_msg.data = "AIRBORNE_MARKER";
-            decomp_ros_msgs::cmd cmd_srv;
-            decomp_ros_msgs::cmd joy_srv;
+//            gui_state_msg.data = ;
+            ground_station_msgs::Cmd cmd_srv;
+            ground_station_msgs::Cmd joy_srv;
             cmd_srv.request.cmd_code = MAV_CMD_INIT;
             joy_srv.request.cmd_code = MAV_CMD_FINISH;
             airborne_srv.call(cmd_srv);
             joyCtrl_srv.call(joy_srv);
-            gui_state_pub_.publish(gui_state_msg);
+//            gui_state_pub_.publish(gui_state_msg);
             flight_cmd_pub.publish(cmd);
         }
 
         void airborneJoy(){
             std_msgs::Int16 cmd;
             cmd.data = JOYSTICK_MAPPING;
-            gui_state_msg.data = "AIRBORNE_JOY";
-            decomp_ros_msgs::cmd marker_srv;
+//            gui_state_msg.data = "AIRBORNE_JOY";
+            ground_station_msgs::Cmd marker_srv;
 //            decomp_ros_msgs::cmd joy_srv;
             marker_srv.request.cmd_code = MAV_CMD_PAUSE;
 //            joy_srv.request.cmd_code = MAV_CMD_INIT;
             airborne_srv.call(marker_srv);
 //            joyCtrl_srv.call(joy_srv);
-            gui_state_pub_.publish(gui_state_msg);
+//            gui_state_pub_.publish(gui_state_msg);
             flight_cmd_pub.publish(cmd);
         }
 
         void airborneFinished(){
-            decomp_ros_msgs::cmd cmd_srv;
+            ground_station_msgs::Cmd cmd_srv;
             std_msgs::Int16 cmd;
             cmd_srv.request.cmd_code = MAV_CMD_FINISH;
             cmd.data = FINISH;

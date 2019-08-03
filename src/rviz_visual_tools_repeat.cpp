@@ -27,9 +27,13 @@ namespace rviz_visual_tools
         remote_receiver.EnterRepeat();
 
         const std::size_t button_size = 10;
-        sub_state_monitor= nh_.subscribe<std_msgs::Int16>("/demo/state", button_size,
+        sub_.state_monitor= nh_.subscribe<std_msgs::Int16>("/demo/state", button_size,
                 &RvizVisualToolsRepeat::stateCallback, this);
 
+        sub_.drone_states = nh_.subscribe<ground_station_msgs::DroneHeartbeat>("/demo/heartbeat",
+                button_size,&RvizVisualToolsRepeat::dronestateCallback,this);
+
+        // command buttons
         btn_load = new QPushButton(this);
         btn_load->setText("LoadPath");
         connect(btn_load,SIGNAL(clicked()),this,SLOT(moveLoad()));
@@ -38,54 +42,107 @@ namespace rviz_visual_tools
         btn_takeoff->setText("Takeoff");
         connect(btn_takeoff,SIGNAL(clicked()),this,SLOT(moveTakeoff()));
 
-        btn_land = new QPushButton(this);
-        btn_land->setText("Land");
-        connect(btn_land,SIGNAL(clicked()),this,SLOT(moveLand()));
-
         btn_reset = new QPushButton(this);
         btn_reset->setText("Reset");
         connect(btn_reset,SIGNAL(clicked()),this,SLOT(reset()));
 
+        // indicators
+        indicator_.led = new QPushButton(this);
+        indicator_.led->setFixedSize(20,20);
+        indicator_.led->setText(" ");
+        indicator_.led->setStyleSheet("background-color:red");
+        indicator_.led->update();
+
+        indicator_.text = new QPushButton(this);
+        indicator_.text->setText(" ");
+        indicator_.text->setFixedSize(400,30);
+        indicator_.text->update();
+        indicator_.text->setDisabled(true);
+
         //Honrizontal Layout
-        auto* hlayout1 = new QHBoxLayout;
-        hlayout1->addWidget(btn_load);
-        hlayout1->addWidget(btn_takeoff);
-        hlayout1->addWidget(btn_land);
-        hlayout1->addWidget(btn_reset);
+        auto* layout_cmd = new QHBoxLayout;
+        layout_cmd->addWidget(btn_load);
+        layout_cmd->addWidget(btn_takeoff);
+        layout_cmd->addWidget(btn_reset);
+
+        auto* layout_indicator = new QHBoxLayout;
+        layout_indicator->addWidget(indicator_.led);
+        layout_indicator->addWidget(indicator_.text);
 
         // Verticle Layout
         auto* layout = new QVBoxLayout;
-        layout->addLayout(hlayout1);
+        layout->addLayout(layout_indicator);
+        layout->addLayout(layout_cmd);
         setLayout(layout);
 
         btn_load->setEnabled(true);
         btn_takeoff->setDisabled(true);
-        btn_land->setDisabled(true);
         btn_reset->setDisabled(true);
     }
 
+    ////////////////// ROS Callback ///////////////////////////////
+
     void RvizVisualToolsRepeat::stateCallback(const std_msgs::Int16::ConstPtr &msg) {
-//        ROS_INFO("haha");
         flight_state_value = msg->data;
         switch (flight_state_value){
-            case 2:
-                btn_takeoff->setEnabled(true);
+            case READY_TO_TAKE_OFF:
+                if (path_loaded_flag){
+                    btn_takeoff->setEnabled(true);
+                }
                 break;
         }
     }
 
+    void RvizVisualToolsRepeat::dronestateCallback(const ground_station_msgs::DroneHeartbeat::ConstPtr &msg){
+        QString error_message=" ";
 
+        if (msg->djiros_state && msg->vo_state && msg->loop_state
+            && msg->n1ctrl_state && msg->planner_state && msg->takeoff_state
+            && msg->gear_state && msg->rc_state){
+            indicator_.led->setStyleSheet("background-color:green");
+        }
+        else indicator_.led->setStyleSheet("background-color:red");
+
+        if (!msg->djiros_state){
+            error_message = error_message + "djiros;";
+        }
+        if(!msg->vo_state){
+            error_message = error_message + " vo;";
+        }
+        if(!msg->loop_state){
+            error_message = error_message + " loop;";
+        }
+        if(!msg->n1ctrl_state){
+            error_message = error_message + " n1ctrl;";
+        }
+        if(!msg->planner_state){
+            error_message = error_message + " planner;";
+        }
+        if(!msg->takeoff_state){
+            error_message = error_message + " takeoff;";
+        }
+        if(!msg->gear_state){
+            error_message = error_message + " gear;";
+        }
+        if(!msg->rc_state){
+            error_message = error_message + " rc;";
+        }
+        indicator_.text->setText(error_message);
+
+
+    }
+
+
+    ///////////////// Button Functions ///////////////////////
     void RvizVisualToolsRepeat::moveLoad() {
-        int32_t tmp_int;
-
         remote_receiver.TeachLoadPath();
-//        tmp_int= remote_control().get_button_value();
-//        ROS_INFO("BUTTON value: %d",tmp_int);
 
         btn_load->setDisabled(true);
 //        btn_takeoff->setEnabled(true);
-        btn_land->setDisabled(true);
+//        btn_land->setDisabled(true);
         btn_reset->setEnabled(true);
+
+        path_loaded_flag = true;
     }
 
     void RvizVisualToolsRepeat::moveTakeoff() {
@@ -93,24 +150,17 @@ namespace rviz_visual_tools
 
         btn_load->setDisabled(true);
         btn_takeoff->setDisabled(true);
-        btn_land->setEnabled(true);
+//        btn_land->setEnabled(true);
         btn_reset->setDisabled(true);
     }
 
-    void RvizVisualToolsRepeat::moveLand() {
-        remote_receiver.RepeatLand();
-
-        btn_takeoff->setDisabled(true);
-        btn_land->setDisabled(true);
-        btn_reset->setEnabled(true);
-    }
 
     void RvizVisualToolsRepeat::reset() {
         remote_receiver.RepeatReset();
 
         btn_load->setEnabled(true);
         btn_takeoff->setDisabled(true);
-        btn_land->setDisabled(true);
+//        btn_land->setDisabled(true);
         btn_reset->setEnabled(true);
     }
 

@@ -25,6 +25,12 @@ namespace rviz_visual_tools
     {
         remote_reciever_.enterMap();
 
+        const std::size_t button_size = 10;
+        sub_.state_monitor= nh_.subscribe<std_msgs::Int16>("/demo/state", button_size,
+                &RvizVisualToolsMap::stateCallback, this);
+        sub_.drone_states = nh_.subscribe<ground_station_msgs::DroneHeartbeat>("/demo/heartbeat",
+                button_size,&RvizVisualToolsMap::dronestateCallback,this);
+
         btn_handheld = new QPushButton(this);
         btn_handheld->setText("Handheld");
         connect(btn_handheld,SIGNAL(clicked()),this,SLOT(enterHandheld()));
@@ -33,22 +39,87 @@ namespace rviz_visual_tools
         btn_airborne->setText("Airborne");
         connect(btn_airborne,SIGNAL(clicked()),this,SLOT(enterAirborne()));
 
+        // indicators
+        indicator_.led = new QPushButton(this);
+        indicator_.led->setFixedSize(20,20);
+        indicator_.led->setText(" ");
+        indicator_.led->setStyleSheet("background-color:red");
+        indicator_.led->update();
+
+        indicator_.text = new QPushButton(this);
+        indicator_.text->setText(" ");
+        indicator_.text->setFixedSize(400,30);
+        indicator_.text->update();
+        indicator_.text->setDisabled(true);
 
         //Honrizontal Layout
-        auto* hlayout1 = new QHBoxLayout;
-        hlayout1->addWidget(btn_handheld);
-        hlayout1->addWidget(btn_airborne);
+        auto* layout_cmd = new QHBoxLayout;
+        layout_cmd->addWidget(btn_handheld);
+        layout_cmd->addWidget(btn_airborne);
+
+        auto* layout_indicator = new QHBoxLayout;
+        layout_indicator->addWidget(indicator_.led);
+        layout_indicator->addWidget(indicator_.text);
 
         // Verticle Layout
         mainLayout = new QVBoxLayout;
-        mainLayout->addLayout(hlayout1);
+        mainLayout->addLayout(layout_indicator);
+        mainLayout->addLayout(layout_cmd);
         setLayout(mainLayout);
 
         btn_handheld->setEnabled(true);
         btn_airborne->setEnabled(true);
     }
 
+    ////////////////////// ROS Callback ////////////////////
+    void RvizVisualToolsMap::stateCallback(const std_msgs::Int16::ConstPtr &msg) {
+        if (gui_state == GUI_MAP_AIRBORNE && msg->data ==READY_TO_TAKE_OFF){
+            btn_airborne_takeoff->setEnabled(true);
+        }
+    }
+
+    void RvizVisualToolsMap::dronestateCallback(const ground_station_msgs::DroneHeartbeat::ConstPtr &msg) {
+        QString error_message=" ";
+
+        if (msg->djiros_state && msg->vo_state && msg->loop_state
+            && msg->n1ctrl_state && msg->planner_state && msg->takeoff_state
+            && msg->gear_state && msg->rc_state){
+            indicator_.led->setStyleSheet("background-color:green");
+        }
+        else indicator_.led->setStyleSheet("background-color:red");
+
+        if (!msg->djiros_state){
+            error_message = error_message + "djiros;";
+        }
+        if(!msg->vo_state){
+            error_message = error_message + " vo;";
+        }
+        if(!msg->loop_state){
+            error_message = error_message + " loop;";
+        }
+        if(!msg->n1ctrl_state){
+            error_message = error_message + " n1ctrl;";
+        }
+        if(!msg->planner_state){
+            error_message = error_message + " planner;";
+        }
+        if(!msg->takeoff_state){
+            error_message = error_message + " takeoff;";
+        }
+        if(!msg->gear_state){
+            error_message = error_message + " gear;";
+        }
+        if(!msg->rc_state){
+            error_message = error_message + " rc;";
+        }
+        indicator_.text->setText(error_message);
+    }
+
+
+    ///////////////////// Handheld /////////////////////////
     void RvizVisualToolsMap::enterHandheld(){
+        gui_state = GUI_MAP_HANDHELD;
+
         remote_reciever_.enterHandheld();
         btn_handheld_start = new QPushButton(this);
         btn_handheld_start->setText("Start");
@@ -96,6 +167,8 @@ namespace rviz_visual_tools
         remote_reciever_.EnterAirborne();
         remote_reciever_.MapBuilding();
 
+        gui_state = GUI_MAP_AIRBORNE;
+
         btn_airborne_takeoff = new QPushButton(this);
         btn_airborne_takeoff->setText("Takeoff");
         connect(btn_airborne_takeoff,SIGNAL(clicked()),this,SLOT(airborneTakeoff()));
@@ -127,7 +200,7 @@ namespace rviz_visual_tools
         setLayout(mainLayout);
 
         btn_handheld->setDisabled(true);
-        btn_airborne_takeoff->setEnabled(true);
+        btn_airborne_takeoff->setDisabled(true);
         btn_airborne_marker->setDisabled(true);
         btn_airborne_joy->setDisabled(true);
         btn_airborne_land->setDisabled(true);
@@ -191,6 +264,8 @@ namespace rviz_visual_tools
 
         btn_handheld->setEnabled(true);
         btn_airborne->setEnabled(true);
+
+        gui_state = GUI_MAP_MAIN;
 
     }
 
