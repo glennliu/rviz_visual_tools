@@ -74,7 +74,9 @@ catkin_package(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
-  CATKIN_DEPENDS
+    ${PROJECT_NAME}_reinit
+
+        CATKIN_DEPENDS
     eigen_conversions
     geometry_msgs
     graph_msgs
@@ -114,12 +116,15 @@ target_link_libraries(${PROJECT_NAME}_map ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_
 # Rviz Teach Panel
 add_library(${PROJECT_NAME}_teach src/rviz_visual_tools_teach.cpp)
 target_link_libraries(${PROJECT_NAME}_teach ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
-#add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
 
 # Rviz Repeat Panel
 add_library(${PROJECT_NAME}_repeat src/rviz_visual_tools_repeat.cpp)
 target_link_libraries(${PROJECT_NAME}_repeat ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
-#add_dependencies(${PROJECT_NAME}_gui rviz_visual_tools_gui_generate_messages)
+
+# Rviz Reinit Airborne
+add_library(${PROJECT_NAME}_reinit src/rviz_visual_tools_reinit.cpp)
+target_link_libraries(${PROJECT_NAME}_reinit ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+
 
 # Remote control library
 add_library(${PROJECT_NAME}_remote_control src/remote_control.cpp)
@@ -204,6 +209,7 @@ install(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
+    ${PROJECT_NAME}_reinit
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
 )

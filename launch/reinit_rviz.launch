@@ -1,0 +1,27 @@
+<launch>
+
+
+    <node pkg="interactive_marker_tutorials" type="airborne_control" name="airborne_control" output="screen">
+        <param name="start_x" value="0"/>
+        <param name="start_y" value="0"/>
+        <param name="start_z" value="1"/>
+        <param name="x_range_min" value="-100"/>
+        <param name="y_range_min" value="-100"/>
+        <param name="z_range_min" value="-10"/>
+        <param name="x_range_max" value="100"/>
+        <param name="y_range_max" value="100"/>
+        <param name="z_range_max" value="20"/>
+        <param name="mesh_marker_flag" type="bool" value="true"/>
+        <param name="remap_flag" type="bool" value="true"/>
+        <param name="marker_trigger_init" type="bool" value="false"/>
+
+    </node>
+
+  <!-- Load Rviz -->
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false"
+	args="-d $(find rviz_visual_tools)/launch/reinit.rviz" output="screen">
+  </node>
+
+  <!-- Fake transform from world origin to robot origin (base) -->
+  <node pkg="tf" type="static_transform_publisher" name="base_to_world" args="0 0 0 0 0 0 /world /base 30" />
+</launch>

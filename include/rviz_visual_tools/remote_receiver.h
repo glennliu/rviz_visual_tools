@@ -279,6 +279,12 @@ namespace rviz_visual_tools
             flight_cmd_pub.publish(cmd);
         }
 
+        void reinitAirborne(){
+            ground_station_msgs::Cmd cmd_srv;
+            cmd_srv.request.cmd_code = MAV_CMD_INIT;
+            airborne_srv.call(cmd_srv);
+        }
+
         void airborneJoy(){
             std_msgs::Int16 cmd;
             cmd.data = JOYSTICK_MAPPING;

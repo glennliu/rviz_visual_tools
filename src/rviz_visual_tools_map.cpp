@@ -30,6 +30,9 @@ namespace rviz_visual_tools
                 &RvizVisualToolsMap::stateCallback, this);
         sub_.drone_states = nh_.subscribe<ground_station_msgs::DroneHeartbeat>("/demo/heartbeat",
                 button_size,&RvizVisualToolsMap::dronestateCallback,this);
+//        sub_.marker_pose = nh_.subscribe<visualization_msgs::InteractiveMarkerInit>("/airborne_control/update_full",
+//                button_size,&RvizVisualToolsMap::markerPoseCallback,this);
+
 
         btn_handheld = new QPushButton(this);
         btn_handheld->setText("Handheld");
@@ -52,7 +55,17 @@ namespace rviz_visual_tools
         indicator_.text->update();
         indicator_.text->setDisabled(true);
 
-        //Honrizontal Layout
+        /*
+        indicator_.markerPose = new QPushButton(this);
+        indicator_.markerPose->setFixedSize(400,30);
+        indicator_.markerPose->setText(" ");
+        indicator_.markerPose->update();
+
+        Honrizontal Layout
+        auto* layout_markerPose = new QHBoxLayout;
+        layout_markerPose->addWidget(indicator_.markerPose);
+*/
+
         auto* layout_cmd = new QHBoxLayout;
         layout_cmd->addWidget(btn_handheld);
         layout_cmd->addWidget(btn_airborne);
@@ -63,15 +76,31 @@ namespace rviz_visual_tools
 
         // Verticle Layout
         mainLayout = new QVBoxLayout;
+//        mainLayout->addLayout(layout_markerPose);
         mainLayout->addLayout(layout_indicator);
         mainLayout->addLayout(layout_cmd);
         setLayout(mainLayout);
 
         btn_handheld->setEnabled(true);
         btn_airborne->setEnabled(true);
+//        indicator_.markerPose->setDisabled(true);
     }
 
     ////////////////////// ROS Callback ////////////////////
+    void RvizVisualToolsMap::markerPoseCallback(const visualization_msgs::InteractiveMarkerInit::ConstPtr &msg) {
+        QString marker_message;
+        geometry_msgs::PoseStamped marker;
+
+        marker.pose.position = msg->markers[0].pose.position;
+//        marker_message = marker.pose.position.x;
+        marker_message = "heheda";
+
+        indicator_.markerPose->setText(marker_message);
+        indicator_.markerPose->update();
+
+
+    }
+
     void RvizVisualToolsMap::stateCallback(const std_msgs::Int16::ConstPtr &msg) {
         if (gui_state == GUI_MAP_AIRBORNE && msg->data ==READY_TO_TAKE_OFF){
             btn_airborne_takeoff->setEnabled(true);

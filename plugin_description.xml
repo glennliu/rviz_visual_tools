@@ -37,3 +37,13 @@
   </description>
 </class>
 </library>
+
+<library path="lib/librviz_visual_tools_reinit">
+<class name="rviz_visual_tools/RvizVisualToolsReinit"
+       type="rviz_visual_tools::RvizVisualToolsReinit"
+       base_class_type="rviz::Panel">
+  <description>
+    A panel widget on Reinit
+  </description>
+</class>
+</library>
