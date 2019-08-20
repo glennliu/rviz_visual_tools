@@ -86,7 +86,7 @@ namespace rviz_visual_tools
         flight_state_value = msg->data;
         switch (flight_state_value){
             case READY_TO_TAKE_OFF:
-                if (path_loaded_flag){
+                if (path_loaded_flag &!retakeoff){
                     btn_takeoff->setEnabled(true);
                 }
                 break;
@@ -152,6 +152,8 @@ namespace rviz_visual_tools
         btn_takeoff->setDisabled(true);
 //        btn_land->setEnabled(true);
         btn_reset->setDisabled(true);
+
+        retakeoff = true;
     }
 
 

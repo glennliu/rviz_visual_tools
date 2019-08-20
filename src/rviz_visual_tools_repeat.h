@@ -61,6 +61,8 @@ namespace rviz_visual_tools
 
         bool path_loaded_flag = false;
 
+        bool retakeoff = false;
+
     protected:
         QHBoxLayout* menuLayout;
         QVBoxLayout* mainLayout;
