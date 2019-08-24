@@ -167,7 +167,7 @@ Visualization Manager:
           Marker Topic: /odom_visualization/robot
           Name: Robot
           Namespaces:
-            {}
+            mesh: true
           Queue Size: 1
           Value: true
         - Class: rviz/Axes
@@ -258,8 +258,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 2.32500005
-        Min Value: -0.324999988
+        Max Value: 1.97500002
+        Min Value: -0.474999994
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -267,7 +267,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: AxisColor
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -284,7 +284,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -376,7 +376,9 @@ Visualization Manager:
           Marker Topic: /tr_node/trajectory_vis
           Name: BezierTraj
           Namespaces:
-            {}
+            tr_node/trajectory0: true
+            tr_node/trajectory1: true
+            tr_node/trajectory_final: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -566,8 +568,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 2.29828286
-        Min Value: -0.27328977
+        Max Value: 2.8833878
+        Min Value: -0.494025588
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -776,14 +778,14 @@ Visualization Manager:
     - Alpha: 0.200000003
       BoundColor: 255; 0; 0
       Class: decomp_rviz_plugins/PolyhedronArray
-      Enabled: true
+      Enabled: false
       MeshColor: 0; 170; 255
       Name: PolyhedronArray
       Scale: 0.100000001
       State: Mesh
       Topic: /tr_node/polyhedron_corridor_mesh
       Unreliable: false
-      Value: true
+      Value: false
       VsColor: 0; 255; 0
       VsScale: 1
   Enabled: true
@@ -804,25 +806,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 8.64736938
+      Distance: 7.16132021
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.43829584
-        Y: -0.144737318
+        X: 1.61795795
+        Y: -0.127795607
         Z: -1.00000358
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.535201848
+      Pitch: 1.1552012
       Target Frame: drone
       Value: ThirdPersonFollower (rviz)
-      Yaw: 3.20744729
+      Yaw: 0.0974401385
     Saved:
       - Class: rviz/ThirdPersonFollower
         Distance: 4.04827738

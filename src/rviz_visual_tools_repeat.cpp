@@ -33,6 +33,9 @@ namespace rviz_visual_tools
         sub_.drone_states = nh_.subscribe<ground_station_msgs::DroneHeartbeat>("/demo/heartbeat",
                 button_size,&RvizVisualToolsRepeat::dronestateCallback,this);
 
+        sub_.bat_state = nh_.subscribe<geometry_msgs::PointStamped>("/djiros/battery_status",button_size,
+                &RvizVisualToolsRepeat::dronebatCallback, this);
+
         // command buttons
         btn_load = new QPushButton(this);
         btn_load->setText("LoadPath");
@@ -59,6 +62,11 @@ namespace rviz_visual_tools
         indicator_.text->update();
         indicator_.text->setDisabled(true);
 
+        indicator_.battery = new QPushButton(this);
+        indicator_.battery->setText(" Battery ");
+        indicator_.battery->update();
+        indicator_.battery->setDisabled(true);
+
         //Honrizontal Layout
         auto* layout_cmd = new QHBoxLayout;
         layout_cmd->addWidget(btn_load);
@@ -68,6 +76,7 @@ namespace rviz_visual_tools
         auto* layout_indicator = new QHBoxLayout;
         layout_indicator->addWidget(indicator_.led);
         layout_indicator->addWidget(indicator_.text);
+        layout_indicator->addWidget(indicator_.battery);
 
         // Verticle Layout
         auto* layout = new QVBoxLayout;
@@ -95,13 +104,7 @@ namespace rviz_visual_tools
 
     void RvizVisualToolsRepeat::dronestateCallback(const ground_station_msgs::DroneHeartbeat::ConstPtr &msg){
         QString error_message=" ";
-
-        if (msg->djiros_state && msg->vo_state && msg->loop_state
-            && msg->n1ctrl_state && msg->planner_state && msg->takeoff_state
-            && msg->gear_state && msg->rc_state){
-            indicator_.led->setStyleSheet("background-color:green");
-        }
-        else indicator_.led->setStyleSheet("background-color:red");
+        bool battery_correct =true ;
 
         if (!msg->djiros_state){
             error_message = error_message + "djiros;";
@@ -127,11 +130,36 @@ namespace rviz_visual_tools
         if(!msg->rc_state){
             error_message = error_message + " rc;";
         }
+        if(bat_voltage <15.4){
+            error_message = error_message +"battery";
+            battery_correct = false;
+        }
         indicator_.text->setText(error_message);
+
+        if (msg->djiros_state && msg->vo_state && msg->loop_state
+            && msg->n1ctrl_state && msg->planner_state && msg->takeoff_state
+            && msg->gear_state && msg->rc_state && battery_correct){
+            indicator_.led->setStyleSheet("background-color:green");
+        }
+        else indicator_.led->setStyleSheet("background-color:red");
 
 
     }
 
+    void RvizVisualToolsRepeat::dronebatCallback(const geometry_msgs::PointStamped::ConstPtr &msg) {
+        QString bat_msg;
+        bat_msg.push_back("Bat:");
+
+        bat_voltage = msg->point.x;
+
+        std::ostringstream bat_str;
+        bat_str<<std::fixed <<std::setprecision(2) <<msg->point.x;
+        std::string s(bat_str.str());
+        bat_msg.push_back(s.data());
+        bat_msg.push_back("V");
+
+        indicator_.battery->setText(bat_msg);
+    }
 
     ///////////////// Button Functions ///////////////////////
     void RvizVisualToolsRepeat::moveLoad() {

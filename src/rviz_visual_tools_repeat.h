@@ -11,6 +11,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Bool.h>
+#include <geometry_msgs/PointStamped.h>
 
 #include <rviz/panel.h>
 #endif
@@ -40,6 +41,7 @@ namespace rviz_visual_tools
 
         void stateCallback(const std_msgs::Int16::ConstPtr &msg);
         void dronestateCallback(const ground_station_msgs::DroneHeartbeat::ConstPtr &msg);
+        void dronebatCallback(const geometry_msgs::PointStamped::ConstPtr &msg);
 
     public Q_SLOTS:
 
@@ -53,15 +55,18 @@ namespace rviz_visual_tools
         ros::NodeHandle nh_;
 
         struct subscriber{
-            ros::Subscriber state_monitor, drone_states;
+            ros::Subscriber state_monitor, drone_states, bat_state;
         }sub_;
 
 
         int16_t flight_state_value;
 
+        std::float_t bat_voltage;
+
         bool path_loaded_flag = false;
 
         bool retakeoff = false;
+
 
     protected:
         QHBoxLayout* menuLayout;
@@ -76,6 +81,7 @@ namespace rviz_visual_tools
         struct indicator{
             QPushButton* led;
             QPushButton* text;
+            QPushButton* battery;
         }indicator_;
 
 
