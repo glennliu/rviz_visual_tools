@@ -376,9 +376,7 @@ Visualization Manager:
           Marker Topic: /tr_node/trajectory_vis
           Name: BezierTraj
           Namespaces:
-            tr_node/trajectory0: true
-            tr_node/trajectory1: true
-            tr_node/trajectory_final: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -568,8 +566,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 2.8833878
-        Min Value: -0.494025588
+        Max Value: 2.29828286
+        Min Value: -0.27328977
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -806,25 +804,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 7.16132021
+      Distance: 4.27280712
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.61795795
-        Y: -0.127795607
-        Z: -1.00000358
+        X: 0.564676762
+        Y: -0.0565861315
+        Z: -1.00000072
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.1552012
+      Pitch: 0.694797158
       Target Frame: drone
       Value: ThirdPersonFollower (rviz)
-      Yaw: 0.0974401385
+      Yaw: 3.21744299
     Saved:
       - Class: rviz/ThirdPersonFollower
         Distance: 4.04827738
@@ -1030,5 +1028,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1535
-  X: 74
-  Y: 27
+  X: 2113
+  Y: 280

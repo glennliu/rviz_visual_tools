@@ -136,12 +136,13 @@ namespace rviz_visual_tools
         }
         indicator_.text->setText(error_message);
 
-        if (msg->djiros_state && msg->vo_state && msg->loop_state
-            && msg->n1ctrl_state && msg->planner_state && msg->takeoff_state
-            && msg->gear_state && msg->rc_state && battery_correct){
-            indicator_.led->setStyleSheet("background-color:green");
-        }
-        else indicator_.led->setStyleSheet("background-color:red");
+//        if (msg->djiros_state && msg->vo_state && msg->loop_state
+//            && msg->n1ctrl_state && msg->planner_state && msg->takeoff_state
+//            && msg->gear_state && msg->rc_state && battery_correct){
+//            indicator_.led->setStyleSheet("background-color:green");
+//        }
+//        else indicator_.led->setStyleSheet("background-color:red");
+        indicator_.led->setStyleSheet("background-color:green");
 
 
     }
