@@ -64,6 +64,7 @@ namespace rviz_visual_tools
             joy_publisher_ = nh_.advertise<sensor_msgs::Joy>("/rviz_visual_tools_gui", 1);
             gui_state_pub_ = nh_.advertise<std_msgs::String>("/gui_state", 1);
             gui_code_pub_ = nh_.advertise<std_msgs::Int16>("/gui_code",1);
+            surfel_cmd = nh_.advertise<std_msgs::Int16>("/surfel_cmd",1);
 
             traj_start_trigger = nh_.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger",1);
             flight_cmd_pub = nh_.advertise<std_msgs::Int16>("/flight_cmd",1);
@@ -78,7 +79,7 @@ namespace rviz_visual_tools
 //            teach_joy_reset = nh_.serviceClient<std_srvs::SetBool>("/teach_joy_reset");
             joyCtrl_srv = nh_.serviceClient<ground_station_msgs::Cmd>("/joyCtrl_cmd");
             odom_visual_reset_srv = nh_.serviceClient<std_srvs::SetBool>("/odom_reset");
-            surf_fusion_srv = nh_.serviceClient<ground_station_msgs::Cmd>("/surf_map_cmd");
+            //surf_fusion_srv = nh_.serviceClient<std_srvs::SetBool>("/surf_map_cmd");
             map_server_srv = nh_.serviceClient<std_srvs::SetBool>("/map_server_init");
             map_server_save_srv = nh_.serviceClient<std_srvs::SetBool>("/map_server_save");
             airborne_srv = nh_.serviceClient<ground_station_msgs::Cmd>("/airborne_cmd");
@@ -122,10 +123,10 @@ namespace rviz_visual_tools
 
             std_srvs::SetBool map_cmd;
             map_cmd.request.data = true;
-            map_server_srv.call(map_cmd);
-            ground_station_msgs::Cmd surf_cmd;
-            surf_cmd.request.cmd_code = MAV_CMD_RUN;
-            surf_fusion_srv.call(surf_cmd);
+            //map_server_srv.call(map_cmd);
+            std_msgs::Int16 surfel_cmd_msg;
+            surfel_cmd_msg.data = 1;    // surfel init
+            surfel_cmd.publish(surfel_cmd_msg);
 
         }
 
@@ -135,15 +136,14 @@ namespace rviz_visual_tools
 //            gui_code_msg.data = GUI_HANDHELD_FINISHED;
 //            gui_code_pub_.publish(gui_code_msg);
 
-            std_srvs::SetBool map_cmd;
-            std_msgs::Int16 save_pose_msg;
-            map_cmd.request.data = true;
-            map_server_save_srv.call(map_cmd);
-            ground_station_msgs::Cmd surf_cmd;
-            surf_cmd.request.cmd_code = MAV_CMD_FINISH;
-            surf_fusion_srv.call(surf_cmd);
+            //std_srvs::SetBool map_cmd;
+            std_msgs::Int16 save_pose_msg, surfel_cmd_msg;
+            //map_cmd.request.data = true;
+            //map_server_save_srv.call(map_cmd);
             save_pose_msg.data = SAVE_POSE_GRAPH;
             save_posegraph_pub.publish(save_pose_msg);
+            surfel_cmd_msg.data = 2;    //surfel save map and stop
+            surfel_cmd.publish(surfel_cmd_msg);
         }
 
         void EnterTeach(){
@@ -409,6 +409,7 @@ namespace rviz_visual_tools
         ros::Publisher gui_state_pub_,gui_code_pub_;
         ros::Publisher traj_start_trigger, flight_cmd_pub,
                 save_posegraph_pub;
+        ros::Publisher surfel_cmd;
 
         // the ROS subscriber
         ros::Subscriber repeat_init_switch,drone_state_sub;
