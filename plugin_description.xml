@@ -38,9 +38,9 @@
 </class>
 </library>
 
-<library path="lib/librviz_visual_tools_reinit">
-<class name="rviz_visual_tools/RvizVisualToolsReinit"
-       type="rviz_visual_tools::RvizVisualToolsReinit"
+<library path="lib/librviz_visual_tools_inspect">
+<class name="rviz_visual_tools/RvizVisualToolsInspect"
+       type="rviz_visual_tools::RvizVisualToolsInspect"
        base_class_type="rviz::Panel">
   <description>
     A panel widget on Reinit

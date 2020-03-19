@@ -19,7 +19,7 @@
 
   <!-- Load Rviz -->
   <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false"
-	args="-d $(find rviz_visual_tools)/launch/reinit.rviz" output="screen">
+	args="-d $(find rviz_visual_tools)/launch/inspect.rviz" output="screen">
   </node>
 
   <!-- Fake transform from world origin to robot origin (base) -->

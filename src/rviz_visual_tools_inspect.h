@@ -2,10 +2,10 @@
 // Created by innozone on 10/8/2019.
 //
 
-#ifndef SRC_RVIZ_VISUAL_TOOLS_REINIT_H
-#define SRC_RVIZ_VISUAL_TOOLS_REINIT_H
+#ifndef SRC_RVIZ_VISUAL_TOOLS_INSPECT_H
+#define SRC_RVIZ_VISUAL_TOOLS_INSPECT_H
 
-#endif //SRC_RVIZ_VISUAL_TOOLS_REINIT_H
+#endif //SRC_RVIZ_VISUAL_TOOLS_INSPECT_H
 //
 // Created by lch on 19-5-16.
 //
@@ -36,11 +36,11 @@ class QSpinBox;
 
 namespace rviz_visual_tools
 {
-    class RvizVisualToolsReinit : public rviz::Panel
+    class RvizVisualToolsInspect : public rviz::Panel
     {
     Q_OBJECT
     public:
-        explicit RvizVisualToolsReinit(QWidget* parent = 0);
+        explicit RvizVisualToolsInspect(QWidget* parent = 0);
 //        void stateCallback(const std_msgs::Int16::ConstPtr &msg);
         void dronestateCallback(const ground_station_msgs::DroneHeartbeat::ConstPtr &msg);
 
@@ -51,13 +51,11 @@ namespace rviz_visual_tools
         void enterAirborne();
 
         void airborneTakeoff();
-        void airborneMarker();
-        void airborneJoy();
+        void takeoff();
+        void land();
         void airborneLand();
 
-        void goback();
 
-        void invalid_button();
 
     private:
         ros::NodeHandle nh_;
@@ -72,16 +70,11 @@ namespace rviz_visual_tools
     protected:
         QVBoxLayout* mainLayout;
 //        QHBoxLayout* handheldLayout;
-        QHBoxLayout* airborneLayout;
+        QHBoxLayout* inspectLayout;
         QHBoxLayout* indicatorLayout;
 
-        QPushButton* btn_airborne;
-
-
-        QPushButton* btn_airborne_takeoff;
-        QPushButton* btn_airborne_marker;
-        QPushButton* btn_airborne_joy;
-        QPushButton* btn_airborne_land;
+        QPushButton* btn_takeoff;
+        QPushButton* btn_land;
 
 
         struct indicator{

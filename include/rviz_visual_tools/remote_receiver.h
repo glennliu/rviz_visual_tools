@@ -319,6 +319,18 @@ namespace rviz_visual_tools
             */
         }
 
+        void inspectBegin(){
+            std_msgs::Int16 cmd;
+            cmd.data = CAPTURE_BEGIN;
+            flight_cmd_pub.publish(cmd);
+        }
+
+        void inspectFinish(){
+            std_msgs::Int16 cmd;
+//            cmd.data = EXP_MODE;
+//            flight_cmd_pub.publish(cmd);
+        }
+
         void back2main(){
             gui_state_msg.data  = "MAIN_MENU";
             gui_state_pub_.publish(gui_state_msg);

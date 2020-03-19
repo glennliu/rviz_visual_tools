@@ -391,7 +391,7 @@ namespace rviz_visual_tools {
 
     void RvizVisualToolsGui::moveAirborneFinish() {
         remote_receiver.airborneFinished();
-//        btn_airborne_marker->setEnabled(true);
+//        btn_takeoff->setEnabled(true);
         btn_airborn_finished->setDisabled(true);
 
     }

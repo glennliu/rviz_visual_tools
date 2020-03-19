@@ -21,25 +21,23 @@
 #include <QtGui/QPalette>
 #include <QtWidgets/QtWidgets>
 
-#include "rviz_visual_tools_reinit.h"
+#include "rviz_visual_tools_inspect.h"
 
 
 namespace rviz_visual_tools
 {
-    RvizVisualToolsReinit::RvizVisualToolsReinit(QWidget *parent) : rviz::Panel(parent)
+    RvizVisualToolsInspect::RvizVisualToolsInspect(QWidget *parent) : rviz::Panel(parent)
     {
-        remote_reciever_.enterMap();
-        remote_reciever_.EnterAirborne();
-        remote_reciever_.reinitAirborne();
-
-
+//        remote_reciever_.enterMap();
+//        remote_reciever_.EnterAirborne();
+//        remote_reciever_.reinitAirborne();
 //        remote_reciever_.MapBuilding();
 
         const std::size_t button_size = 10;
 //        sub_.state_monitor= nh_.subscribe<std_msgs::Int16>("/demo/state", button_size,
 //                                                           &RvizVisualToolsMap::stateCallback, this);
         sub_.drone_states = nh_.subscribe<ground_station_msgs::DroneHeartbeat>("/demo/heartbeat",
-                                                                               button_size,&RvizVisualToolsReinit::dronestateCallback,this);
+                                                                               button_size,&RvizVisualToolsInspect::dronestateCallback,this);
 
         // indicators
         indicator_.led = new QPushButton(this);
@@ -60,42 +58,38 @@ namespace rviz_visual_tools
 //        btn_airborne_takeoff->setText("Takeoff");
 //        connect(btn_airborne_takeoff,SIGNAL(clicked()),this,SLOT(airborneTakeoff()));
 
-        btn_airborne_marker = new QPushButton(this);
-        btn_airborne_marker->setText("Marker");
-        connect(btn_airborne_marker,SIGNAL(clicked()),this,SLOT(airborneMarker()));
+        btn_takeoff = new QPushButton(this);
+        btn_takeoff->setText("Takeoff");
+        connect(btn_takeoff,SIGNAL(clicked()),this,SLOT(takeoff()));
 
-        btn_airborne_joy = new QPushButton(this);
-        btn_airborne_joy->setText("Joy");
-        connect(btn_airborne_joy,SIGNAL(clicked()),this,SLOT(airborneJoy()));
+        btn_land = new QPushButton(this);
+        btn_land->setText("Reset");
+        connect(btn_land,SIGNAL(clicked()),this,SLOT(land()));
 
-        btn_airborne_land = new QPushButton(this);
-        btn_airborne_land->setText("Land");
-        connect(btn_airborne_land,SIGNAL(clicked()),this,SLOT(airborneLand()));
+
 
         mainLayout = new QVBoxLayout;
-        airborneLayout = new QHBoxLayout;
-//        airborneLayout->addWidget(btn_airborne_takeoff);
-        airborneLayout->addWidget(btn_airborne_marker);
-        airborneLayout->addWidget(btn_airborne_joy);
-        airborneLayout->addWidget(btn_airborne_land);
+        inspectLayout = new QHBoxLayout;
+//        inspectLayout->addWidget(btn_airborne_takeoff);
+        inspectLayout->addWidget(btn_takeoff);
+        inspectLayout->addWidget(btn_land);
 
         indicatorLayout = new QHBoxLayout;
         indicatorLayout->addWidget(indicator_.led);
         indicatorLayout->addWidget(indicator_.text);
 
         mainLayout->addLayout(indicatorLayout);
-        mainLayout->addLayout(airborneLayout);
+        mainLayout->addLayout(inspectLayout);
         setLayout(mainLayout);
 
 //        btn_airborne_takeoff->setEnabled(true);
-        btn_airborne_marker->setEnabled(true);
-        btn_airborne_joy->setEnabled(true);
-        btn_airborne_land->setEnabled(true);
+        btn_takeoff->setEnabled(true);
+        btn_land->setDisabled(true);
     }
 
     ////////////////// ROS Callback ///////////////////////////////
 
-    void RvizVisualToolsReinit::dronestateCallback(const ground_station_msgs::DroneHeartbeat::ConstPtr &msg){
+    void RvizVisualToolsInspect::dronestateCallback(const ground_station_msgs::DroneHeartbeat::ConstPtr &msg){
         QString error_message=" ";
 
         if (msg->djiros_state && msg->vo_state && msg->loop_state
@@ -137,20 +131,21 @@ namespace rviz_visual_tools
 
     ///////////////// Button Functions ///////////////////////
 //
-//    void RvizVisualToolsReinit::airborneLand() {
+//    void RvizVisualToolsInspect::airborneLand() {
 //
 //    }
 
-//    void RvizVisualToolsReinit::airborneMarker() {
-////        remote_reciever_.airborneMarker();
+    void RvizVisualToolsInspect::takeoff() {
+        remote_reciever_.inspectBegin();
+        btn_land->setEnabled(true);
+        btn_takeoff->setDisabled(true);
+    }
+
+    void RvizVisualToolsInspect::land() {
+        btn_takeoff->setEnabled(true);
+    }
 //
-//    }
-//
-//    void RvizVisualToolsReinit::airborneJoy() {
-////        remote_reciever_.airborneJoy();
-//    }
-//
-//    void RvizVisualToolsReinit::airborneLand(){
+//    void RvizVisualToolsInspect::airborneLand(){
 ////        remote_reciever_.airborneFinished();
 ////        remote_reciever_.MapFinished();
 //
@@ -163,4 +158,4 @@ namespace rviz_visual_tools
 }
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(rviz_visual_tools::RvizVisualToolsReinit, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(rviz_visual_tools::RvizVisualToolsInspect, rviz::Panel)

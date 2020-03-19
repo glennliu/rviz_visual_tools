@@ -10,9 +10,14 @@
 // #define ON_THE_GROUND       10
 // #define IN_THE_AIR          11
 // #define READY_TO_TAKE_OFF   12
+#define CAPTURE_MODE        3
+#define FLY_TEACH_MODE      4
 #define REPEAT_MODE         5
 #define MAPPING_MODE        6
 #define DEMO_MODE           7
+#define EXP_MODE            999
+#define EXP_BEGIN           1   //take off cmd
+#define EXP_GO              2   // exec traj cmd
 // #define TAKE_OFF            5
 // #define LANDING             6
 #define ALIGN_VIO_WORLD     8
@@ -23,7 +28,7 @@
 #define INVALID             2
 
 #define SYSTEM_INITIALIZE   10
-#define READY_TO_TAKE_OFF   11      // [GUI] will send to gui, 
+#define READY_TO_TAKE_OFF   11      // [GUI] will send to gui,
 #define TAKE_OFF            12
 #define TAKE_OFF_FINISH     13
 #define HOVER               14
@@ -33,18 +38,21 @@
 #define FINISH_LANDING      18
 #define LANDING_FINISH      19
 
-#define REPEAT_BEGIN        21 
+#define REPEAT_BEGIN        21
 #define MAP_BEGIN           22      // [GUI] get from GUI, then takeoff and hover
 #define WAYPOINT_MAPPING    23      // [GUI] get from GUI, then go to waypoint mapping mode
 #define JOYSTICK_MAPPING    24      // [GUI] get from GUI. then go to Joystick mapping mode
+#define CAPTURE_BEGIN       25
+#define NULL_GUI_COMMAND    0
+
 #define CTRL_CMD_MODE       31      // n1ctrl get in to CMD_CTRL state, double hand shake: demo_main.cpp <----> n1ctrl
+#define JS_CTRL_MODE        32
 
 #define SAVE_POSE_GRAPH     98      // send to pose_graph_node, then it will save pose graph
 #define FINISH              99      // [GUI] get from gui, then it will landing
 /*
-MAPPING: 
-
-1. Main --> READY_TO_TAKE_OFF --> GUI --> MAP_BEGIN --> Main -->Takeoff .... 
+MAPPING:
+1. Main --> READY_TO_TAKE_OFF --> GUI --> MAP_BEGIN --> Main -->Takeoff ....
 2. Main --> EXECUTE_TRAJ --> GUI --> PoseStamped
 3. GUI  --> FINISH --> Main --> Landing...
 */

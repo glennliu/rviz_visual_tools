@@ -74,7 +74,7 @@ catkin_package(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
-    ${PROJECT_NAME}_reinit
+    ${PROJECT_NAME}_inspect
 
         CATKIN_DEPENDS
     eigen_conversions
@@ -121,9 +121,9 @@ target_link_libraries(${PROJECT_NAME}_teach ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${Q
 add_library(${PROJECT_NAME}_repeat src/rviz_visual_tools_repeat.cpp)
 target_link_libraries(${PROJECT_NAME}_repeat ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 
-# Rviz Reinit Airborne
-add_library(${PROJECT_NAME}_reinit src/rviz_visual_tools_reinit.cpp)
-target_link_libraries(${PROJECT_NAME}_reinit ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+# Rviz Inspect Airborne
+add_library(${PROJECT_NAME}_inspect src/rviz_visual_tools_inspect.cpp)
+target_link_libraries(${PROJECT_NAME}_inspect ${rviz_DEFAULT_PLUGIN_LIBRARIES} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 
 
 # Remote control library
@@ -209,7 +209,7 @@ install(
     ${PROJECT_NAME}_map
     ${PROJECT_NAME}_teach
     ${PROJECT_NAME}_repeat
-    ${PROJECT_NAME}_reinit
+    ${PROJECT_NAME}_inspect
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
